@@ -7,10 +7,12 @@ ms.author: eur
 description: Defines a client link object.
 ---
 # ClientLink Data Object - Customer Management
-Defines a client link object. Acceptance of a client link invitation enables an agency to  manage the corresponding client accounts. To send an invitation to manage a client account, call the [AddClientLinks](addclientlinks.md) operation and specify one client link per account to manage. For more information about the client link lifecycle, see [Link to Client Accounts](../guides/management-model-agencies.md#clientlink).
+Defines a client link object. Acceptance of a client link invitation enables an agency to  manage the corresponding client ad accounts. To send an invitation to manage a client ad account, call the [AddClientLinks](addclientlinks.md) operation and specify one client link per account to manage. 
 
-> [!NOTE]
-> This object does not have a system defined identifier. To uniquely identify a client link, use either the *ClientAccountId* or *ClientAccountNumber* paired with either the *ManagingCustomerId* or *ManagingCustomerNumber*.
+A client link does not have a system defined identifier. To uniquely identify a client link, use either the *ClientAccountId* or *ClientAccountNumber* paired with either the *ManagingCustomerId* or *ManagingCustomerNumber*.
+
+> [!TIP]
+> For more information about the client link lifecycle, see the [Account Hierarchy](../guides/account-hierarchy-permissions.md#account-hierarchy) technical guide. For more information about becoming an agency, see the [Resources for agency partners](https://about.ads.microsoft.com/en-us/resources/agency-hub). For more information from a client's perspective, see [How to have an agency manage your Microsoft Advertising account](https://help.ads.microsoft.com/#apex/3/en/52004/3).  
 
 ## Syntax
 ```xml

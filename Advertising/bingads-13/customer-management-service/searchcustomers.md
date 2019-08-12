@@ -4,7 +4,7 @@ ms.service: bing-ads-customer-management-service
 ms.topic: article
 author: eric-urban
 ms.author: eur
-description: Searches for customers that match a specified criteria.
+description: Searches for customers that match the request criteria.
 dev_langs: 
   - csharp
   - java
@@ -12,7 +12,7 @@ dev_langs:
   - python
 ---
 # SearchCustomers Service Operation - Customer Management
-Searches for customers that match a specified criteria.
+Searches for customers that match the request criteria.
 
 ## <a name="request"></a>Request Elements
 The *SearchCustomersRequest* object defines the [body](#request-body) and [header](#request-header) elements of the service operation request. The elements must be in the same order as shown in the [Request SOAP](#request-soap). 
@@ -39,7 +39,7 @@ The *SearchCustomersResponse* object defines the [body](#response-body) and [hea
 
 |Element|Description|Data Type|
 |-----------|---------------|-------------|
-|<a name="customers"></a>Customers|A  list of customers that meet the specified criteria.|[Customer](customer.md) array|
+|<a name="customers"></a>Customers|A  list of customers that meet the request criteria.|[Customer](customer.md) array|
 
 ### <a name="response-header"></a>Response Header Elements
 [!INCLUDE[response-header](./includes/response-header.md)]

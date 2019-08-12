@@ -4,7 +4,7 @@ ms.service: bing-ads-customer-management-service
 ms.topic: article
 author: eric-urban
 ms.author: eur
-description: Searches for user invitations that match a specified criteria.
+description: Searches for user invitations that match the request criteria.
 dev_langs: 
   - csharp
   - java
@@ -12,7 +12,7 @@ dev_langs:
   - python
 ---
 # SearchUserInvitations Service Operation - Customer Management
-Searches for user invitations that match a specified criteria.
+Searches for user invitations that match the request criteria.
 
 This operation returns all pending invitations, whether or not they have expired. Accepted invitations are not included in the response.  
 

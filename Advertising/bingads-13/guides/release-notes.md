@@ -9,6 +9,14 @@ description: Get information about changes to Bing Ads API Version 13 by month.
 # Bing Ads API Release Notes
 See below for information about changes to Bing Ads API Version 13 by month. 
 
+## <a name="august2019"></a>August 2019
+See below for Bing Ads API updates during this calendar month. 
+
+- [Bing Ads API SDK Updates](#sdk-august2019)  
+
+### <a name="sdk-august2019"></a>Bing Ads API SDK Updates
+The Bing Ads .NET, Java, Php, and Python SDKs are updated. For details please see release notes for Microsoft Advertising [.NET](https://github.com/BingAds/BingAds-dotNet-SDK/releases/tag/v12.13.4), [Java](https://github.com/BingAds/BingAds-Java-SDK/releases/tag/v12.13.4), [Php](https://github.com/BingAds/BingAds-PHP-SDK/releases/tag/v0.12.13.4), and [Python](https://github.com/BingAds/BingAds-Python-SDK/releases/tag/v12.13.4) SDK version 12.13.4. 
+
 ## <a name="july2019"></a>July 2019
 See below for Bing Ads API updates during this calendar month. 
 

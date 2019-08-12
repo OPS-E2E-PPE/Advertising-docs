@@ -134,43 +134,6 @@ The file size limit for upload in production is 100MB or 2.5 million rows. For s
 ### <a name="editorialsupport"></a>Editorial Support
 Sandbox supports limited editorial reviews and appeals. You cannot get the reasons for editorial issues in sandbox as you could in production, for example via the [GetEditorialReasonsByIds](../campaign-management-service/geteditorialreasonsbyids.md) service operation.
 
-#### Magic Terms
-If you know of editorial terms that will fail editorial review, you can use them. Otherwise, to test your application's editorial logic, use the following format to construct a *magic* term that determines by country whether or not the ad or keyword will pass editorial review. These magic terms are supported in sandbox only.
-
-{*MatchType*}{*Language*}{*FlagArea*}{m}{*StatusPerCountry*}{m1}
-
-You must specify a value for each component of the term.
-
-|Component|Description|
-|-------------|---------------|
-|*MatchType*|Determines whether the magic term is the only word in the keyword. The following are the possible match-type values (not case sensitive) that you can specify.<br/><br/>e - Exact. The keyword must contain only the magic term.<br/><br/>p - Phrase. The keyword can contain other words in addition to the magic term.|
-|*Language*|Determines the editorial guidelines to apply. You should specify the same language that the ad group specifies. The following are the possible language values (not case sensitive) that you can specify.<br/><br/>EN - English<br/><br/>FR - French<br/><br/>DE - German|
-|*FlagArea*|Determines the area of the editorial guidelines to apply to the term. The following are the possible guideline areas that you can specify.<br/><br/>3 - Alcohol<br/><br/>15 - Gambling<br/><br/>97 - Adult Erotica<br/><br/>To specify more than one flag area for a keyword, specify multiple phrase magic terms. For example, pen3m569m1 pen15m569m1.|
-|m|Literal. Must be m.|
-|*StatusPerCountry*|Determines the editorial status to return for each language. The integer is broken down into 2-bit fields. Each 2-bit field represents the editorial status to apply for the country.<br/><br/>The following shows each country's position in the integer for each *Language* value. The *Language* value determines the countries that you can include in the integer. For example, for English, United States (US) is in the most significant position and Ireland (IE) is in the least significant position.<br/><br/>EN - IESGINCAGBUS<br/><br/>FR - FRCA<br/><br/>DE - DECHAT<br/><br/>You can set each country's 2-bit value to one of the following values.<br/><br/>00 - Approved<br/><br/>01 - Rejected<br/><br/>10 - Pending inactive<br/><br/>11 - Pending active<br/><br/>For example, to specify that you want the term rejected for US and pending inactive for CA, you would set the integer's bit fields to 000000100001 (or decimal 33).|
-|m1|Literal. Must be m1.|
-
-##### Where to use the magic term
-You can use magic terms in the following locations.
-
-- A text ad's *Title* element. 
-- A text ad's *Description* element. 
-- A keyword's *Text* element. 
-
-##### Example magic term
-If you specified a term using the following components, the resulting term would be pen3m569m1.
-
-- Match type: Phrase 
-- Language: English   
-- Flag area: Alcohol  
-- Editorial status per country: 569 (001000111001), which is broken out as follows.
-  - Rejected in US  
-  - Pending inactive in GB  
-  - Pending active in CA  
-  - Approved in IN  
-  - Pending inactive in SG  
-  - Approved in IE
-
 ### <a name="productads"></a>Product Ads
 Product ads are supported in sandbox in the United States. To be auto-approved you must create a catalog and a Microsoft Merchant Center store that ends with "sandbox" as follows.
 
@@ -187,10 +150,7 @@ Product ads are supported in sandbox in the United States. To be auto-approved y
 6. Add your catalog name, select **Manually upload file later** under **Catalog feed file**, and click **Save**.
 
 ## <a name="billing"></a>Customer Billing Service
-The Customer Billing service is not supported in sandbox.
-
-## <a name="customer"></a>Customer Management Service
-Most customer management service operations are supported in sandbox. Unsupported features include [AddClientLinks](../customer-management-service/addclientlinks.md) and [UpdateClientLinks](../customer-management-service/updateclientlinks.md).
+Payment methods are not supported in sandbox. 
 
 ## <a name="reporting"></a>Reporting Service
 When you create a keyword, test performance data should be generated within a few hours. The data is provided to test generating, retrieving, and parsing reports in the sandbox. You should not use the test data to infer or expect similar performance for your keywords in production. 

@@ -40,7 +40,7 @@ The *GetKeywordIdeasResponse* object defines the [body](#response-body) and [hea
 
 |Element|Description|Data Type|
 |-----------|---------------|-------------|
-|<a name="keywordideas"></a>KeywordIdeas|The list of keyword ideas.|[KeywordIdea](keywordidea.md) array|
+|<a name="keywordideas"></a>KeywordIdeas|The list of keyword ideas.<br/><br/>Currently up to 3,000 list items can be returned although the limit is subject to change.|[KeywordIdea](keywordidea.md) array|
 
 ### <a name="response-header"></a>Response Header Elements
 [!INCLUDE[response-header](./includes/response-header.md)]
