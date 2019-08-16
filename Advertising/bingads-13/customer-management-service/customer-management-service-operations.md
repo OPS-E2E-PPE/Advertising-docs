@@ -36,6 +36,6 @@ The Customer Management service defines the following service operations.
 |[UpdateAccount](updateaccount.md)|Updates the details of the specified account.|1 *Account*|
 |[UpdateClientLinks](updateclientlinks.md)|Updates the status of the specified client links.|10 *ClientLink*|
 |[UpdateCustomer](updatecustomer.md)|Updates the details of the specified customer.|1 *Customer*|
-|[UpdateUser](updateuser.md)|Updates the details of the specified user.|1 *User*|
+|[UpdateUser](updateuser.md)|Updates the personal and business contact information about a Microsoft Advertising user.|1 *User*|
 |[UpdateUserRoles](updateuserroles.md)|Updates the roles of the specified user.|1 *NewRoleId*<br/><br/>1 *UserId*|
 |[ValidateAddress](validateaddress.md)|Determines whether or not the submitted address is valid for Microsoft Advertising accounts.|1 *Address*|

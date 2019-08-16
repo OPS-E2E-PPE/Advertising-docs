@@ -12,7 +12,12 @@ dev_langs:
   - python
 ---
 # UpdateUserRoles Service Operation - Customer Management
-Updates the roles of the specified user.
+Updates the roles of the specified user. 
+
+> [!NOTE]
+> Only a user with Super Admin or Aggregator credentials can update user roles. 
+
+For users with an account role, you can add and delete the accounts that the user has access to. For users with a customer role, you can add and delete the customers that the user has access to. You can also change a user from having an account role to having a customer role or vice-versa.
 
 ## <a name="request"></a>Request Elements
 The *UpdateUserRolesRequest* object defines the [body](#request-body) and [header](#request-header) elements of the service operation request. The elements must be in the same order as shown in the [Request SOAP](#request-soap). 

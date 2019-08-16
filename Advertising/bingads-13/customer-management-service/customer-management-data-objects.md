@@ -31,6 +31,6 @@ The Customer Management service defines the following data objects.
 |[Paging](paging.md)|Defines a paging object that you can use to request objects in batches.|
 |[PersonName](personname.md)|Defines the name of a user.|
 |[Predicate](predicate.md)|Defines a predicate for the list of entities requested using one of the search operations, for example [SearchAccounts](searchaccounts.md), [SearchClientLinks](searchclientlinks.md), [SearchCustomers](searchcustomers.md), or [SearchUserInvitations](searchuserinvitations.md).|
-|[User](user.md)|Defines a user.|
+|[User](user.md)|Defines personal and business contact information about a Microsoft Advertising user.|
 |[UserInfo](userinfo.md)|Defines a user identification object that contains information that identifies a user.|
 |[UserInvitation](userinvitation.md)|Defines a user invitation.|

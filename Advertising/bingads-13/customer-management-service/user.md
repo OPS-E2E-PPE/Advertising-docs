@@ -4,10 +4,10 @@ ms.service: bing-ads-customer-management-service
 ms.topic: article
 author: eric-urban
 ms.author: eur
-description: Defines a user.
+description: Defines personal and business contact information about a Microsoft Advertising user.
 ---
 # User Data Object - Customer Management
-Defines a user.
+Defines personal and business contact information about a Microsoft Advertising user.
 
 Multiple user objects can be assigned to the same person i.e., one user per person per customer. The Name, Lcid, JobTitle, and ContactInfo user settings for the same person will be automatically synchronized with any updates that occur after user consolidation. The LastModifiedByUserId and LastModifiedTime are also in sync across each returned [User](user.md) object, unless you had an old username merged and have not updated any user settings since the consolidation. 
 
