@@ -16,7 +16,7 @@ Since a recipient can accept the invitation and sign into Microsoft Advertising 
 After the invitation has been accepted, you can call [GetUsersInfo](getusersinfo.md) and [GetUser](getuser.md) to access the Microsoft Advertising user details. Once again though, since a recipient can accept the invitation and sign into Microsoft Advertising with a Microsoft account different than the invitation email address, you cannot determine with certainty the mapping from *UserInvitation* to accepted [User](user.md). With the user ID returned by [GetUsersInfo](getusersinfo.md) or [GetUser](getuser.md), you can call [DeleteUser](deleteuser.md) to remove the user.
 
 > [!TIP]
-> With Microsoft Advertising multi-user credentials you can accept an invitation to manage a separate customer with your existing Microsoft Advertising credentials. For more information, see the [Multi-User Credentials](../guides/account-hierarchy-permissions.md#multi-user) technical guide.
+> With Microsoft Advertising multi-user credentials you can accept an invitation to manage a separate customer with your existing Microsoft Advertising credentials. For more information, see the [Multi-User Credentials](../guides/account-hierarchy-permissions.md#multi-user-credentials) technical guide.
 
 ## Syntax
 ```xml
