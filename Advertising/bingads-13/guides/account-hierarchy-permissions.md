@@ -113,7 +113,7 @@ If you accept an invitation to be a user in another customer with your existing 
 ```
 
 #### <a name="roles-account-hierarchy"></a>Roles Example for Account Hierarchy
-Building upon the [Roles Example for Multi-User Credentials](roles-multi-user) (although [Multi-User Credentials](#multi-user-credentials) are not required to build a hierarchy), let's say for example, one of the Super Admin users in Manager Account L1 (customer ID 111) (whether you or another Super Admin) setup an [Agency Hierachy](#agency-hierarchy) under Manager Account L1 (customer ID 111) with both customer and ad account client links:  
+Building upon the [Roles Example for Multi-User Credentials](#roles-multi-user) (although [Multi-User Credentials](#multi-user-credentials) are not required to build a hierarchy), let's say for example, one of the Super Admin users in Manager Account L1 (customer ID 111) (whether you or another Super Admin) setup an [Agency Hierachy](#agency-hierarchy) under Manager Account L1 (customer ID 111) with both customer and ad account client links:  
 - Manager Account L1 (customer ID 111) links to Manager Account L2 (customer ID 222) with an Administrative link. 
 - Manager Account L2 (customer ID 222) links to Manager Account L3 (customer ID 333) with a Standard link. 
 - Manager Account L3 (customer ID 333) links to Ad Account 4A (account ID 444111) with an account level link. Ad Account 4A (account ID 444111) is directly under Manager Account L4 (customer ID 444), which is not itself included in the customer level hierarchy.  
@@ -284,7 +284,7 @@ An agency builds a Bing Ads API application for their company to manage the camp
 > 
 > Only a user with Super Admin credentials can add, update, and search for client links to customers. 
 > 
-> Client links from customer to customer is only available for pilot customers where [GetCustomerPilotFeatures](getcustomerpilotfeatures.md) returns feature identifier 449. 
+> Client links from customer to customer is only available for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449. 
 
 There is no set limit to the amount of client accounts that can be linked to an agency. For more information about becoming an agency, see the help article [Managing your clients as an agency on Microsoft Advertising](https://help.ads.microsoft.com/#apex/3/en/52083/3) or [Resources for agency partners](https://about.ads.microsoft.com/en-us/resources/agency-hub).  
 
