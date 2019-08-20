@@ -64,20 +64,25 @@ Here is an example [CustomerRoles](../customer-management-service/getuser.md#cus
 Each [CustomerRole](../customer-management-service/customerrole.md#roleid) represents the permissions that a person has when accessing the corresponding account or set of accounts.  
 - The [RoleId](../customer-management-service/customerrole.md#roleid) represents the [user role](#user-roles) e.g., 41 represents the Super Admin user role.  
 - The [CustomerId](../customer-management-service/customerrole.md#customerid) is the identifier of the customer where the user has either signed up or has some [account hierarchy](#account-hierarchy) relationship.  
-- The [AccountIds](../customer-management-service/customerrole.md#accountids) contains identifiers of ad accounts that the user can access in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
-- The [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) contains identifiers of linked ad accounts that the user can access in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
-- The [CustomerLinkPermission](../customer-management-service/customerrole.md#customerlinkpermission) qualifies the [account hierarchy](#account-hierarchy) relationship and [user role](#user-roles) in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
+- The [AccountIds](../customer-management-service/customerrole.md#accountids) element contains identifiers of ad accounts that the user can access in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
+- The [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) element contains identifiers of linked ad accounts that the user can access in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
+- The [CustomerLinkPermission](../customer-management-service/customerrole.md#customerlinkpermission) may limit the [user role](#user-roles) depending on the [account hierarchy](#account-hierarchy) relationship in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
 
-Taken individually, the user has the same role on the [CustomerId](../customer-management-service/customerrole.md#customerid), [AccountIds](../customer-management-service/customerrole.md#accountids), and [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) for a given [CustomerRole](../customer-management-service/customerrole.md); however, if a user has multiple customer roles then taken as a whole the effective set of permissions depend on the full set of [CustomerRole](../customer-management-service/customerrole.md) objects. Several examples are provided below. 
+Taken individually, a user has the same role on the [CustomerId](../customer-management-service/customerrole.md#customerid), [AccountIds](../customer-management-service/customerrole.md#accountids), and [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) for a given [CustomerRole](../customer-management-service/customerrole.md); however, if a user has multiple customer roles then taken as a whole the effective set of permissions depend on the full set of [CustomerRole](../customer-management-service/customerrole.md) objects returned by [GetUser](../customer-management-service/getuser.md). Several examples are provided below. 
 
 #### <a name="roles-initial-signup"></a>Roles Example for New User
-First signed up with Super Admin permissions:
+If you just signed up for the first time with Microsoft Advertising and created a new account, the [GetUser](../customer-management-service/getuser.md) operation will return one [CustomerRole](../customer-management-service/customerrole.md) object. 
+- The [RoleId](../customer-management-service/customerrole.md#roleid) is 41 because the first user of a new account has the Super Admin [user role](#user-roles).  
+- The [CustomerId](../customer-management-service/customerrole.md#customerid) is the customer identifier provisioned when you signed up.  
+- The [AccountIds](../customer-management-service/customerrole.md#accountids) element is empty because a Super Admin can always access all ad accounts in the customer with the [CustomerId](../customer-management-service/customerrole.md#customerid) identifier.  
+- The [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) element is empty because you have not yet linked to any client ad accounts.    
+- The [CustomerLinkPermission](../customer-management-service/customerrole.md#customerlinkpermission) is empty because you can access ad accounts directly via the assigned [CustomerId](../customer-management-service/customerrole.md#customerid).  
 
 ```xml
 <CustomerRoles xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 	<a:CustomerRole>
 	   <a:RoleId>41</a:RoleId>
-	   <a:CustomerId>123</a:CustomerId>
+	   <a:CustomerId>999</a:CustomerId>
 	   <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
 	   <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
 	   <a:CustomerLinkPermission i:nil="true"/>
@@ -85,16 +90,103 @@ First signed up with Super Admin permissions:
  </CustomerRoles>
 ```
 
-
 #### <a name="roles-multi-user"></a>Roles Example for Multi-User Credentials
+If you accept an invitation to be a user in another customer with your existing login credentials from the previous example, you have [Multi-User Credentials](#multi-user-credentials) in Microsoft Advertising. Your login credentials directly associated with each of the customer identifiers and the [GetUser](../customer-management-service/getuser.md) operation will return two [CustomerRole](../customer-management-service/customerrole.md) objects. In this example the elements within each [CustomerRole](../customer-management-service/customerrole.md) are equivalent except for the [CustomerId](../customer-management-service/customerrole.md#customerid). The [RoleId](../customer-management-service/customerrole.md#roleid) depends on the role assigned when the Super Admin of Manager Account L1 (customer ID 111) sent you the invitation.  
 
+```xml
+<CustomerRoles xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>999</a:CustomerId>
+      <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:CustomerLinkPermission i:nil="true"/>
+  </a:CustomerRole>
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>111</a:CustomerId>
+      <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:CustomerLinkPermission i:nil="true"/>
+  </a:CustomerRole>
+</CustomerRoles>
+```
 
 #### <a name="roles-account-hierarchy"></a>Roles Example for Account Hierarchy
+Building upon the [Roles Example for Multi-User Credentials](roles-multi-user) (although [Multi-User Credentials](#multi-user-credentials) are not required to build a hierarchy), let's say for example, one of the Super Admin users in Manager Account L1 (customer ID 111) (whether you or another Super Admin) setup an [Agency Hierachy](#agency-hierarchy) under Manager Account L1 (customer ID 111) with both customer and ad account client links:  
+- Manager Account L1 (customer ID 111) links to Manager Account L2 (customer ID 222) with an Administrative link. 
+- Manager Account L2 (customer ID 222) links to Manager Account L3 (customer ID 333) with a Standard link. 
+- Manager Account L3 (customer ID 333) links to Ad Account 4A (account ID 444111) with an account level link. Ad Account 4A (account ID 444111) is directly under Manager Account L4 (customer ID 444), which is not itself included in the customer level hierarchy.  
 
+You still have access to the original customer you signed up i.e., 999, and you are still a direct user on Manager Account L1 (customer ID 111). Now the [GetUser](../customer-management-service/getuser.md) operation will return two additional [CustomerRole](../customer-management-service/customerrole.md) objects i.e., one each for Manager Account L2 (customer ID 222) and Manager Account L3 (customer ID 333). You can access all of the [AccountIds](../customer-management-service/customerrole.md#accountids) and [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) that are accessible via Manager Account L2 (customer ID 222) and 333 respectively. In this example you can access Ad Account 4A (account ID 444111) through Manager Account L3 (customer ID 333) i.e., when calling service operations that require the customer identifier, you must use Manager Account L3 (customer ID 333) to access account 444111.  
+
+```xml
+<CustomerRoles xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>999</a:CustomerId>
+      <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:CustomerLinkPermission i:nil="true"/>
+  </a:CustomerRole>
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>111</a:CustomerId>
+      <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:CustomerLinkPermission i:nil="true"/>
+  </a:CustomerRole>
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>222</a:CustomerId>
+      <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:CustomerLinkPermission>Administrative</a:CustomerLinkPermission>
+  </a:CustomerRole>
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>333</a:CustomerId>
+      <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+        <b:long>444111</b:long>
+      </a:LinkedAccountIds>
+      <a:CustomerLinkPermission>Standard</a:CustomerLinkPermission>
+  </a:CustomerRole>
+</CustomerRoles>
+```
+
+The customer roles inform which customers you can access but do not always describe how you obtained the access. The [GetLinkedAccountsAndCustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md) operation returns the customer and account hierarchy under the specified customer. For details and examples see [View the Hierarchy](#view-hierarchy). 
 
 #### <a name="roles-aggregator-hierarchy"></a>Roles Example for Aggregator Hierarchy
+If you just signed up for the first time with Microsoft Advertising, obtained [Aggregator](#aggregator-hierarchy) credentials, and created one new customer and ad account via [SignupCustomer](../customer-management-service/signupcustomer.md), the [GetUser](../customer-management-service/getuser.md) operation will return two [CustomerRole](../customer-management-service/customerrole.md) objects. The elements within each [CustomerRole](../customer-management-service/customerrole.md) are equivalent except for the [RoleId](../customer-management-service/customerrole.md#roleid). An Aggregator has two role identifiers in Microsoft Advertising i.e., 41 and 33. 
+- The [RoleId](../customer-management-service/customerrole.md#roleid) in one of the [CustomerRole](../customer-management-service/customerrole.md) objects is 41 because the first user of a new account has the Super Admin [user role](#user-roles). The [RoleId](../customer-management-service/customerrole.md#roleid) in another of the [CustomerRole](../customer-management-service/customerrole.md) objects is 33 which represents the Aggregator [user role](#user-roles). 
+- The [CustomerId](../customer-management-service/customerrole.md#customerid) is the customer identifier provisioned when you signed up.  
+- The [AccountIds](../customer-management-service/customerrole.md#accountids) element is empty because a Super Admin can always access all ad accounts in the customer with the [CustomerId](../customer-management-service/customerrole.md#customerid) identifier.  
+- The [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) element contains the identifer of the ad account in the child customer that you created via [SignupCustomer](../customer-management-service/signupcustomer.md). The child customer identifier is not represented in the [CustomerRole](../customer-management-service/customerrole.md) object. You can call [GetAccount](../customer-management-service/getaccount.md) to get ad account details such as its' [ParentCustomerId](../customer-management-service/advertiseraccount.md#parentcustomerid).    
+- The [CustomerLinkPermission](../customer-management-service/customerrole.md#customerlinkpermission) is empty because you can access ad accounts directly via the assigned [CustomerId](../customer-management-service/customerrole.md#customerid).  
 
-
+```xml
+<CustomerRoles xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <a:CustomerRole>
+      <a:RoleId>33</a:RoleId>
+      <a:CustomerId>111</a:CustomerId>
+      <a:AccountIds i:nil="true" xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+        <b:long>111222</b:long>                  
+      </a:LinkedAccountIds>
+      <a:CustomerLinkPermission i:nil="true"/>
+  </a:CustomerRole>
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>111</a:CustomerId>
+      <a:AccountIds i:nil="true" xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+        <b:long>111222</b:long>                  
+      </a:LinkedAccountIds>
+      <a:CustomerLinkPermission i:nil="true"/>
+  </a:CustomerRole>
+</CustomerRoles>
+```
 
 ### <a name="access-developer-token"></a>Access and Developer Tokens
 To programmatically act on behalf of a Microsoft Advertising user, you must obtain their consent. At the end of the consent workflow you can get an access token that represents the user. The access token has the same roles and access to the same accounts as the user has in the Microsoft Advertising web application. In other words, the same accounts and user role permissions available in the Microsoft Advertising web application are available to the user programmatically through the API. For information on getting an access token to act on behalf of a Microsoft Advertising user, see [Authentication with OAuth](authentication-oauth.md). 
@@ -176,59 +268,221 @@ Now let's say that one@contoso.com is acting in the context of Customer B and up
 |789|890|Customer C - Account A|456|
 
 ## <a name="account-hierarchy"></a>Account Hierarchy
-- direct advertiser model via ad accounts under one customer
-- agency model via account and customer links
-- Aggregator model via signupcustomer
-
 Search advertising businesses typically align with one or more of the following account management models. 
 - A direct advertiser builds a Bing Ads API application for its own advertising campaigns and is billed directly by Microsoft for valid ad clicks.  
 - A tool provider builds a Bing Ads API application for other companies to manage their advertising campaigns, and is not billed by Microsoft. The advertiser user owns the accounts, is billed directly by Microsoft for valid ad clicks, and may pay a fee to the tool provider.  
 - An agency builds a Bing Ads API application for their company to manage the campaigns of their advertising clients. The client of the agency owns the accounts, is billed directly by Microsoft for valid ad clicks, and may pay a fee to the agency.  
 - A reseller builds a Bing Ads API application to manage the campaigns of their advertising clients, and is billed directly by Microsoft for valid live clicks. The advertiser does not sign up for Microsoft Advertising credentials, and may pay a fee to the reseller.  
 
+Regardless of the business model, the initial signup and [user role](#user-roles) provisioning is more or less the same. The sections below discuss additional steps needed to setup [agency](#agency-hierarchy) and [aggregator](#aggregator-hierarchy) hierarchies. 
+
 ### <a name="agency-hierarchy"></a>Agency Hierarchy
-An agency builds a Bing Ads API application for their company to manage the campaigns of their advertising clients. Agencies can manage some or all aspects of an advertiser account. When sending the invitation to manage a client account, the agency can specify whether the client or agency is responsible for billing. For more information about becoming an agency, see the help article [Managing your clients as an agency on Microsoft Advertising](https://help.ads.microsoft.com/#apex/3/en/52083/3) or [Resources for agency partners](https://about.ads.microsoft.com/en-us/resources/agency-hub).
+An agency builds a Bing Ads API application for their company to manage the campaigns of their advertising clients. Client links enable an agency to manage some or all aspects of an advertiser account. The client link request can limit the scope to individual client ad accounts or all accounts under the customer. 
 
 > [!NOTE]
-> The client account must be set up for post-pay billing. Prepaid accounts are not supported for management by agencies.
+> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. 
+> 
+> Only a user with Super Admin credentials can add, update, and search for client links to customers. 
+> 
+> Client links from customer to customer is only available for pilot customers where [GetCustomerPilotFeatures](getcustomerpilotfeatures.md) returns feature identifier 449. 
 
-Only an agency Super Admin can add, update, and search for client links. Linking enables any agency Super Admin to access the specified client account. If the client has multiple accounts, then a client link invitation must be sent for each client account. The Super Admin can also determine which individual accounts the Advertiser Campaign Manager and Viewer users can access. In the figure above **User A** has access to account A1, and **User B** has access to accounts A2, B1, and B2. For more information, see [User Roles](#user-roles) technical guide.
+There is no set limit to the amount of client accounts that can be linked to an agency. For more information about becoming an agency, see the help article [Managing your clients as an agency on Microsoft Advertising](https://help.ads.microsoft.com/#apex/3/en/52083/3) or [Resources for agency partners](https://about.ads.microsoft.com/en-us/resources/agency-hub).  
 
-#### <a name="clientlink"></a>Link to Client Accounts
+#### <a name="clientlink"></a>Setup the Hierarchy
 
-To manage client accounts, a Super Admin user of the agency must send an invitation to the client, which must then be accepted by a Super Admin user of the client. To determine whether a link already exists, call the [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation and check the Status element of any returned [ClientLink](../customer-management-service/clientlink.md). For a list of possible status values, see [ClientLinkStatus value set](../customer-management-service/clientlinkstatus.md). To search by individual account, set the predicate field to ClientAccountId and set the predicate value to the account identifier that you want to find. There is no set limit to the amount of client accounts that can be linked to an agency.
+To setup a hierarchy to manage client accounts, the agency must send an invitation to the client, which must then be accepted by an authorized user in the client customer. To determine whether a link already exists, call the [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation and check the Status element of any returned [ClientLink](../customer-management-service/clientlink.md). To search by individual account, set the predicate field to ClientAccountId and set the predicate value to the account identifier that you want to find. 
 
 If a link exists with status either Active, LinkAccepted, LinkInProgress, LinkPending, UnlinkInProgress, or UnlinkPending, the agency cannot initiate a duplicate client link.
 
 If a client link to the specified account does not yet exist, or if the lifecycle of an existing link had ended with status of Expired, LinkCanceled, LinkDeclined, LinkFailed, or Inactive, then the agency can initiate a new client link invitation by calling the [AddClientLinks](../customer-management-service/addclientlinks.md) operation. The service transitions client link status to LinkPending immediately.
 
 > [!IMPORTANT]
-> The agency can specify whether the client or agency is responsible for billing by setting the *IsBillToClient* element in the service request. If not otherwise specified, the agency will be billed.
+> For ad account client links, the agency must specify whether the client or agency will be responsible for billing by setting the [IsBillToClient](../customer-management-service/clientlink.md#isbilltoclient) element in the client link request.  
 
-To update a client link, the *TimeStamp* element is required for validation, so you must first call the [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation to get the existing *ClientLink* object. Then modify the *Status* element of the returned *ClientLink*, and include the updated *ClientLink* object in a subsequent call to the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation.
-
-The client can only use the *UpdateClientLinks* operation to update the status as LinkAccepted or LinkDeclined.
+To update a client link, its [TimeStamp](../customer-management-service/clientlink.md#timestamp) element is required for validation, so you must first call the [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation to get the existing [ClientLink](../customer-management-service/clientlink.md) object. Then modify the [Status](../customer-management-service/clientlink.md#status) element of the returned [ClientLink](../customer-management-service/clientlink.md), and include the updated [ClientLink](../customer-management-service/clientlink.md) object in a subsequent call to the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation.
 
 > [!NOTE]
-> The client can accept or decline through an application built on the Bing Ads API, or through the **Accounts & Billing** tab in the Microsoft Advertising web application. In either case the client credentials must be used to accept or decline. For more information, see the Microsoft Advertising help article [Managing your clients as an agency on Microsoft Advertising](https://help.ads.microsoft.com/#apex/3/en/52083/3).
+> The client can accept or decline through an application built on the Bing Ads API, or through the **Accounts & Billing** tab in the Microsoft Advertising web application. 
 
-If the client sets the status to LinkDeclined, the client link lifecycle ends. You cannot update a declined client link, and you must send a new invitation to manage the client account. If the client sets the status to LinkAccepted, the status transitions to LinkInProgress. If the link process succeeds, the service updates the client link status to Active.
+The client can only use the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation to update the status as LinkAccepted or LinkDeclined.
+- If the client sets the status to LinkDeclined, the client link lifecycle ends. You cannot update a declined client link, and you must send a new invitation to manage the client account. 
+- If the client sets the status to LinkAccepted, the status transitions to LinkInProgress. If the link process succeeds, the service updates the client link status to Active.
 
-If the link process fails, possibly due to a billing transition error, the service updates the client link status to LinkFailed. You cannot update a failed client link, and you must send a new invitation to manage the client account.
-
-If the client or agency does not take action within 30 days, the service sets the status to LinkExpired and the client link lifecycle ends. You cannot update an expired client link, and you must send a new invitation to manage the client account.
+If the link cannot be established for example, due to a billing transition error, the service updates the client link status to LinkFailed. You cannot update a failed client link, and you must send a new invitation to manage the client account. If the client or agency does not take action within 30 days, the service sets the status to LinkExpired and the client link lifecycle ends. You cannot update an expired client link, and you must send a new invitation to manage the client account.
 
 ![Link to Client](media/client-link-status-flow.png "Link to Client")
 
-If the client link status is LinkPending, the agency may choose to cancel a prior link request. If the client link status is Active, the agency may choose to initiate the unlink process, which would terminate the existing relationship with the client.
+If the client link status is LinkPending, the agency can choose to cancel a prior link request. 
 
-To initiate the unlink process, the agency sets the client link status to UnlinkRequested and calls the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation. Updating the status with UnlinkRequested effectively sets the status to UnlinkInProgress. The service transitions client link status to UnlinkPending immediately, and then waits for system resources to proceed. The state should transition quickly to UnlinkInProgress.
+If the client link status is Active, the agency can choose to terminate the existing relationship with the client. To initiate the unlink process, the agency sets the client link status to UnlinkRequested and calls the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation. Updating the status with UnlinkRequested effectively sets the status to UnlinkInProgress. The service transitions client link status to UnlinkPending immediately, and then waits for system resources to proceed. The state should transition quickly to UnlinkInProgress.
 
-If the unlink process fails, possibly due to a billing transition error, the client link resumes to Active status. If the unlink process succeeds the status will update to Inactive, and the client link lifecycle ends. You cannot update an inactive client link, and you must send a new invitation to manage the client account.
+If the unlink process fails for example, due to a billing transition error, the client link resumes to Active status. If the unlink process succeeds the status will update to Inactive, and the client link lifecycle ends. You cannot update an inactive client link, and you must send a new invitation to manage the client account.
 
 ![Unlink from Client](media/client-unlink-status-flow.png "Unlink from Client")
 
-For code examples that show how to add and update a client link invitation, see [Client Links Code Example](code-example-client-links.md).
+For code examples that show how to add and update a client link invitation, see [Client Links Code Example](code-example-client-links.md).  
+
+#### <a name="view-hierarchy"></a>View the Hierarchy
+An agency has several options to view the accounts hierarchy. 
+ - The [GetUser](../customer-management-service/getuser.md) operation returns user roles per customer and linked accounts. The customer roles inform which customers you can access but do not always describe how you obtained the access. Determining the [user role](#user-roles) will make a difference between Administrative and Standard client links.  
+ - The [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation will give you the current status of a client link if you already have the agency and client entity identifiers.  
+ - The [GetLinkedAccountsAndCustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md) operation returns the customer and account hierarchy under the specified customer. 
+
+Let's say for example, that an agency hierarchy was setup under Manager Account L1 (customer ID 111) with both customer and ad account client links:  
+- Before the hierarchy was setup, four separate manager accounts had been provisioned. Manager Account L1 contains Ad Account 1A and Ad Account 1B. Manager Account L2 contains Ad Account 2A and Ad Account 2B. Manager Account L3 contains Ad Account 3A and Ad Account 3B. Manager Account L4 contains Ad Account 4A and Ad Account 4B.   
+- Manager Account L1 (customer ID 111) links to Manager Account L2 (customer ID 222) with an Administrative link. 
+- Manager Account L2 (customer ID 222) links to Manager Account L3 (customer ID 333) with a Standard link. 
+- Manager Account L3 (customer ID 333) links to Ad Account 4A (account ID 444111) with an account level link. Ad Account 4A (account ID 444111) is directly under Manager Account L4 (customer ID 444), which is not itself included in the customer level hierarchy. In this example you can access Ad Account 4A (account ID 444111) through Manager Account L3 (customer ID 333) i.e., when calling service operations that require the customer identifier, you must use Manager Account L3 (customer ID 333) to access account 444111.  
+
+A user with access to the full hierarchy who signs into the Microsoft Advertising web application on Manager Account L1 (customer ID 111) would have access to the following account view. 
+
+![Manager Account with Hierarchy](media/manageraccount-withhierarchy.png "Manager Account with Hierarchy")
+
+If you search by customer ID 111 the [GetLinkedAccountsAndCustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md) response includes Ad Account 1A and Ad Account 1B within [AccountsInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md#accountsinfo). Information about Manager Account L2 is returned within [CustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md#customersinfo). 
+
+```xml
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Header>
+      <h:TrackingId xmlns:h="https://bingads.microsoft.com/Customer/v13">f4f8d20a-e354-4bfc-b196-bef9d766d372</h:TrackingId>
+   </s:Header>
+   <s:Body>
+      <GetLinkedAccountsAndCustomersInfoResponse xmlns="https://bingads.microsoft.com/Customer/v13">
+         <AccountsInfo xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:AccountInfo>
+               <a:Id>111111</a:Id>
+               <a:Name>Ad Account 1A</a:Name>
+               <a:Number>E101NUMB</a:Number>
+               <a:AccountLifeCycleStatus>Pause</a:AccountLifeCycleStatus>
+               <a:PauseReason>2</a:PauseReason>
+            </a:AccountInfo>
+            <a:AccountInfo>
+               <a:Id>111222</a:Id>
+               <a:Name>Ad Account 1B</a:Name>
+               <a:Number>E102NUMB</a:Number>
+               <a:AccountLifeCycleStatus>Pause</a:AccountLifeCycleStatus>
+               <a:PauseReason>2</a:PauseReason>
+            </a:AccountInfo>
+         </AccountsInfo>
+         <CustomersInfo xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:CustomerInfo>
+               <a:Id>222</a:Id>
+               <a:Name>Manager Account L2</a:Name>
+            </a:CustomerInfo>
+         </CustomersInfo>
+      </GetLinkedAccountsAndCustomersInfoResponse>
+   </s:Body>
+</s:Envelope>
+```
+
+Likewise if you search by customer ID 222 the [GetLinkedAccountsAndCustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md) response includes Ad Account 2A and Ad Account 2B within [AccountsInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md#accountsinfo). Information about Manager Account L3 is returned within [CustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md#customersinfo). 
+
+```xml
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Header>
+      <h:TrackingId xmlns:h="https://bingads.microsoft.com/Customer/v13">f4f8d20a-e354-4bfc-b196-bef9d766d372</h:TrackingId>
+   </s:Header>
+   <s:Body>
+      <GetLinkedAccountsAndCustomersInfoResponse xmlns="https://bingads.microsoft.com/Customer/v13">
+         <AccountsInfo xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:AccountInfo>
+               <a:Id>222111</a:Id>
+               <a:Name>Ad Account 2A</a:Name>
+               <a:Number>E201NUMB</a:Number>
+               <a:AccountLifeCycleStatus>Pause</a:AccountLifeCycleStatus>
+               <a:PauseReason>2</a:PauseReason>
+            </a:AccountInfo>
+            <a:AccountInfo>
+               <a:Id>222222</a:Id>
+               <a:Name>Ad Account 2B</a:Name>
+               <a:Number>E202NUMB</a:Number>
+               <a:AccountLifeCycleStatus>Pause</a:AccountLifeCycleStatus>
+               <a:PauseReason>2</a:PauseReason>
+            </a:AccountInfo>
+         </AccountsInfo>
+         <CustomersInfo xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:CustomerInfo>
+               <a:Id>333</a:Id>
+               <a:Name>Manager Account L3</a:Name>
+            </a:CustomerInfo>
+         </CustomersInfo>
+      </GetLinkedAccountsAndCustomersInfoResponse>
+   </s:Body>
+</s:Envelope>
+```
+
+Now if you search by customer ID 333 the [GetLinkedAccountsAndCustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md) response includes Ad Account 3A, Ad Account 3B, and Ad Account 4A within [AccountsInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md#accountsinfo). No manager accounts are listed within [CustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md#customersinfo). 
+
+```xml
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Header>
+      <h:TrackingId xmlns:h="https://bingads.microsoft.com/Customer/v13">e9ecedcc-720d-4ba4-a3e8-9bdef148dae2</h:TrackingId>
+   </s:Header>
+   <s:Body>
+      <GetLinkedAccountsAndCustomersInfoResponse xmlns="https://bingads.microsoft.com/Customer/v13">
+         <AccountsInfo xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:AccountInfo>
+               <a:Id>333111</a:Id>
+               <a:Name>Ad Account 3A</a:Name>
+               <a:Number>E301NUMB</a:Number>
+               <a:AccountLifeCycleStatus>Pause</a:AccountLifeCycleStatus>
+               <a:PauseReason>2</a:PauseReason>
+            </a:AccountInfo>
+            <a:AccountInfo>
+               <a:Id>333222</a:Id>
+               <a:Name>Ad Account 3B</a:Name>
+               <a:Number>E302NUMB</a:Number>
+               <a:AccountLifeCycleStatus>Pause</a:AccountLifeCycleStatus>
+               <a:PauseReason>2</a:PauseReason>
+            </a:AccountInfo>
+            <a:AccountInfo>
+               <a:Id>444111</a:Id>
+               <a:Name>Ad Account 4A</a:Name>
+               <a:Number>E401NUMB</a:Number>
+               <a:AccountLifeCycleStatus>Pause</a:AccountLifeCycleStatus>
+               <a:PauseReason>2</a:PauseReason>
+            </a:AccountInfo>
+         </AccountsInfo>
+         <CustomersInfo xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"/>
+      </GetLinkedAccountsAndCustomersInfoResponse>
+   </s:Body>
+</s:Envelope>
+```
+
+Now if you search by customer ID 444 the [GetLinkedAccountsAndCustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md) response includes Ad Account 4A and Ad Account 4B within [AccountsInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md#accountsinfo). No manager accounts are listed within [CustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md#customersinfo). 
+
+```xml
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Header>
+      <h:TrackingId xmlns:h="https://bingads.microsoft.com/Customer/v13">e5799094-dad6-45b8-983b-4ace50efd86b</h:TrackingId>
+   </s:Header>
+   <s:Body>
+      <GetLinkedAccountsAndCustomersInfoResponse xmlns="https://bingads.microsoft.com/Customer/v13">
+         <AccountsInfo xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            <a:AccountInfo>
+               <a:Id>444111</a:Id>
+               <a:Name>Ad Account 4A</a:Name>
+               <a:Number>E401NUMB</a:Number>
+               <a:AccountLifeCycleStatus>Pause</a:AccountLifeCycleStatus>
+               <a:PauseReason>2</a:PauseReason>
+            </a:AccountInfo>
+            <a:AccountInfo>
+               <a:Id>444222</a:Id>
+               <a:Name>Ad Account 4B</a:Name>
+               <a:Number>E402NUMB</a:Number>
+               <a:AccountLifeCycleStatus>Pause</a:AccountLifeCycleStatus>
+               <a:PauseReason>2</a:PauseReason>
+            </a:AccountInfo>
+         </AccountsInfo>
+         <CustomersInfo xmlns:a="https://bingads.microsoft.com/Customer/v13/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"/>
+      </GetLinkedAccountsAndCustomersInfoResponse>
+   </s:Body>
+</s:Envelope>
+```
+
+Here are some notable takeaways from the example responses above: 
+- Although [GetLinkedAccountsAndCustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md) appears to return a similar structure whether requested by customer ID 111 or 222, there is a notable difference. As mentioned in the scenario introduction the link from Mananger Account L1 to Manager Account L2 is an Administrative link whereas the link from Manager Account L2 to Manager Account L3 is Standard. The [GetLinkedAccountsAndCustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md) response does not include details about link type i.e., Administrative or Standard. Since the link type can further refine a user's permission depending on their user role, it is included with each [CustomerRole](../customer-management-service/customerrole.md) when you call [GetUser](../customer-management-service/getuser.md). 
+- When searching by customer ID 333 there is no apparent difference between Ad Account 3A, Ad Account 3B, and Ad Account 4A. As mentioned in the scenario introduction Ad Account 4A is accessible via an ad account client link, whereas the other accounts are directly contained by Manager Account L3. If you have a requirement to determine the direct owner of each account you can call other service operations e.g., [GetAccount](../customer-management-service/getaccount.md) or [SearchAccounts](../customer-management-service/searchaccounts.md).  
+- In the current hierarchy Ad Account 4B is only available to users in Manager Account L4. Users in Manager Account L3 can be provisioned to access 3 accounts, users in Manager Account L2 can be provisioned to access 5 accounts, and users in Manager Account L1 can be provisioned to access 7 accounts. A Super Admin can choose to limit each user's access to a subset of the available accounts. 
 
 ### <a name="aggregator-hierarchy"></a>Aggregator Hierarchy
 The reseller role is offered to a limited set of partners that offer search-marketing tools and services to a large number of advertisers. The reseller role allows partners to programmatically create new customer accounts. The reseller is billed by invoice for all advertising costs incurred by their clients. The advertiser typically does not sign up for Microsoft Advertising credentials, and may pay a fee to the reseller. 

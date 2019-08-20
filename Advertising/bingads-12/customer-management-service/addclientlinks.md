@@ -15,7 +15,9 @@ dev_langs:
 Initiates the client link process to manage the accounts of another customer. Sends a link request from one customer to another customer or account.
 
 > [!NOTE]
-> Only a user with Super Admin credentials can add, update, and search for client links. 
+> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. 
+> 
+> Only a user with Super Admin credentials can add, update, and search for client links to customers. 
 > 
 > Customer to customer linking is only available in Bing Ads API version 13 for pilot customers where [GetCustomerPilotFeatures](getcustomerpilotfeatures.md) returns feature identifier 449. 
 

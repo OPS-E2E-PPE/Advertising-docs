@@ -15,9 +15,11 @@ dev_langs:
 Initiates the client link process to manage the accounts of another customer. Sends a link request from one customer to another customer or account.
 
 > [!NOTE]
-> Only a user with Super Admin credentials can add, update, and search for client links. 
+> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. 
 > 
-> Customer to customer linking is only available for pilot customers where [GetCustomerPilotFeatures](getcustomerpilotfeatures.md) returns feature identifier 449. 
+> Only a user with Super Admin credentials can add, update, and search for client links to customers. 
+> 
+> Client links from customer to customer is only available for pilot customers where [GetCustomerPilotFeatures](getcustomerpilotfeatures.md) returns feature identifier 449. 
 
 There is no set limit to the amount of client accounts that can be linked to an agency. The client account must have a valid payment instrument set up for post-pay billing. Prepaid accounts are not supported for management by agencies.  
 

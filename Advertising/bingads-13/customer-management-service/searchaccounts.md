@@ -12,7 +12,12 @@ dev_langs:
   - python
 ---
 # SearchAccounts Service Operation - Customer Management
-Searches for accounts that match the request criteria.
+Searches for accounts that match the request criteria. 
+
+For example you can search for accounts that the current authenticated user can access.
+
+> [!TIP]
+> Please see the [Account Hierchy and User Permissions](../guides/account-hierarchy-permissions.md) guide for an overview with examples. 
 
 ## <a name="request"></a>Request Elements
 The *SearchAccountsRequest* object defines the [body](#request-body) and [header](#request-header) elements of the service operation request. The elements must be in the same order as shown in the [Request SOAP](#request-soap). 
