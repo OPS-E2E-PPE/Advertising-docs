@@ -15,7 +15,7 @@ dev_langs:
 Updates the roles of the specified user. 
 
 > [!NOTE]
-> Only a user with Super Admin or Aggregator credentials can update user roles. 
+> Only a user with Super Admin or Standard credentials can update user roles. A Standard user cannot set or modify the Super Admin role. For more information, see the [User Roles](../guides/account-hierarchy-permissions.md#user-roles) technical guide.  
 
 For users with an account role, you can add and delete the accounts that the user has access to. For users with a customer role, you can add and delete the customers that the user has access to. You can also change a user from having an account role to having a customer role or vice-versa.
 

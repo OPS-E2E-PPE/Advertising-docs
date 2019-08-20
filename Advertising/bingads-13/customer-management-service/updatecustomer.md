@@ -15,7 +15,7 @@ dev_langs:
 Updates the details of the specified customer.  
 
 > [!NOTE]
-> Only a user with Super Admin or Aggregator credentials can update customers. 
+> Only a user with Super Admin credentials can update customers. For more information, see the [User Roles](../guides/account-hierarchy-permissions.md#user-roles) technical guide.  
 
 Because the update operation requires the time stamp of the most recent customer write operation, you must first call the [GetCustomer](getcustomer.md) operation. The [GetCustomer](getcustomer.md) operation returns the customer's data, which includes the time stamp. The update call will fail if you use an old time stamp e.g., the customer data is updated by your application or another application after you obtained the time stamp. 
 

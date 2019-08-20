@@ -15,11 +15,11 @@ dev_langs:
 Creates a new customer and account that rolls up to your reseller payment method.
 
 > [!NOTE]
-> You must be a reseller with aggregator user permissions to call this operation. For more details see the [Account Hierarchy](../guides/account-hierarchy-permissions.md#account-hierarchy) technical guide.  
+> You must be a reseller with the Aggregator user role to call this operation. For more details see the [Aggregator Hierarchy](../guides/account-hierarchy-permissions.md#aggregator-hierarchy) technical guide.  
 
-Pass both [Customer](customer.md) and [AdvertiserAccount](advertiseraccount.md) objects in the request. The customer object includes the customer's name, the address where the customer is located, the market in which the customer operates, and the industry in which the customer participates. Although it is possible to add multiple customers with the same details, you should use unique customer names so that users can easily distinguish between customers in a user interface.
-
-The account object must specify the name of the account; the type of currency to use to settle the account; and the payment method identifier, which must be set to null. The operation generates an invoice account and sets the payment method identifier to the identifier associated with the reseller's invoice. You are invoiced for all charges incurred by the customers that you manage.
+Pass both [Customer](customer.md) and [AdvertiserAccount](advertiseraccount.md) objects in the request. 
+- The customer object includes the customer's name, the address where the customer is located, the market in which the customer operates, and the industry in which the customer participates. Although it is possible to add multiple customers with the same details, you should use unique customer names so that users can easily distinguish between customers in a user interface.
+- The ad account object must include the name of the account, the type of currency to use to settle the account, and the payment method identifier must be set to null. The operation generates an invoice account and sets the payment method identifier to the identifier associated with the reseller's invoice. You are invoiced for all charges incurred by the customers that you manage.
 
 When the operation succeeds, a new managed customer is created outside of the reseller customer and an ad account is created within the managed customer. 
 

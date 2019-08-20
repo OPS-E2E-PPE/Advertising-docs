@@ -15,11 +15,9 @@ dev_langs:
 Searches for the client links for the customer of the current authenticated user, filtered by the search criteria. The operation returns the most recent link for each unique combination of agency customer and client account. 
 
 > [!NOTE]
-> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. 
+> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. Only a user with Super Admin credentials can add, update, and search for client links to customers. For more information, see the [User Roles](../guides/account-hierarchy-permissions.md#user-roles) technical guide.  
 > 
-> Only a user with Super Admin credentials can add, update, and search for client links to customers. 
-> 
-> Client links from customer to customer is only available for pilot customers where [GetCustomerPilotFeatures](getcustomerpilotfeatures.md) returns feature identifier 449. 
+> Client links from customer to customer are only available for pilot customers where [GetCustomerPilotFeatures](getcustomerpilotfeatures.md) returns feature identifier 449. 
 
 If your user is within a client customer that has one or more accounts managed by an agency, then you may search one at a time for individual accounts that were or are eligible to be linked. To search by individual account, set the predicate field to ClientAccountId and set the predicate value to the account identifier that you want to find.
 

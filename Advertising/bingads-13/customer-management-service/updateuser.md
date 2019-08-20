@@ -15,7 +15,7 @@ dev_langs:
 Updates the personal and business contact information about a Microsoft Advertising user. 
 
 > [!NOTE]
-> Only a user with Super Admin or Aggregator credentials can update users. 
+> Only a user with Super Admin or Standard credentials can update users. For more information, see the [User Roles](../guides/account-hierarchy-permissions.md#user-roles) technical guide.  
 
 Because the update operation requires the time stamp of the most recent user write operation, you must first call the [GetUser](getuser.md) operation. The [GetUser](getuser.md) operation returns the user's data, which includes the time stamp. The update call will fail if you use an old time stamp e.g., the user data is updated by your application or another application after you obtained the time stamp. 
 

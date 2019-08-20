@@ -14,9 +14,10 @@ dev_langs:
 # AddAccount Service Operation - Customer Management
 Creates a new account within an existing customer. 
 
-Only a user with Super Admin credentials can add accounts. 
+> [!NOTE]
+> Only a user with Super Admin credentials can add accounts. For more information, see the [User Roles](../guides/account-hierarchy-permissions.md#user-roles) technical guide.  
 
-> [!IMPORTANT]
+> [!TIP]
 > Resellers should call [SignupCustomer](signupcustomer.md) instead of *AddAccount*. For more details see the [Account Hierarchy](../guides/account-hierarchy-permissions.md#account-hierarchy) technical guide.
 
 ## <a name="request"></a>Request Elements

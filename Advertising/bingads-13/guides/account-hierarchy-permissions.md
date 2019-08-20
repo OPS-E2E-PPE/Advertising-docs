@@ -7,9 +7,11 @@ ms.author: "eur"
 description: Determine user permissions for the account hierarchy. 
 ---
 # Account Hierarchy and User Permissions
-Microsoft Advertising users can use the same login credentials to access multiple accounts, potentially with different permissions on each account. 
+Microsoft Advertising users can use the same login credentials to access multiple accounts, potentially with different permissions on each account. An agency can setup a hierarchy of accounts to manage all users and accounts from one parent account, use one central wallet to pay for everything, and share campaign resources such as [Universal Event Tracking](universal-event-tracking.md) (UET) tags and remarketing lists across customers.
 
-[User Roles and Permissions](#user-roles-permissions) describes the actions available for each user role, how users are provisioned on an account, how you can act on behalf of an authenticated Microsoft Advertising user, and how you can discover their current access rights with the Bing Ads API.  
+- [User Roles and Permissions](#user-roles-permissions) describes the actions available for each [user role](#user-roles), how [users are provisioned](#assign-user-roles) on an account, how you can [discover their current access rights](#get-user-roles), and how you can [act on behalf of an authenticated Microsoft Advertising user](#access-developer-token) with the Bing Ads API.  
+- [Multi-User Credentials](#multi-user-credentials) describes how you can use one set of Microsoft Advertising credentials to access ad accounts across multiple customers, potentially with different user roles and permissions. If you already have multiple sets of login credentials you can ask support to [consolidate](#multi-user-consolidation) to one set of credentials. 
+- [Account Hierarchy](#account-hierarchy) describes how you can provide access to a hierarchy of accounts for one or more users in a customer. Effectively you can manage all users and accounts from one parent account, and use one central wallet to pay for everything. Also with hierarchies, you can share campaign resources such as [Universal Event Tracking](universal-event-tracking.md) (UET) tags and remarketing lists across customers. 
 
 For more information about the campaign hierarchy within an account, see [Entity Limits](entity-hierarchy-limits.md), [Campaigns](campaigns.md), and [Ads](ads.md).
 
@@ -20,7 +22,7 @@ Your application might only need to support one Super Admin user on a known acco
 The user role granted by a customer's Super Admin or the Microsoft Advertising system administrator determines service availability. For example a user with the Advertiser Campaign Manager role can add and update campaigns, but cannot create or update users. Unless otherwise noted in the reference content per service operation, the following table describes at a high level the service restrictions per user role. 
 
 > [!NOTE]
-> Only Super Admin and Standard users can be set as the primary contact for an account.
+> Only Super Admin and Standard users can be set as the primary contact for an account. For more details about user roles see the [How do I give someone access to my Microsoft Advertising account?](https://help.ads.microsoft.com/#apex/3/en/52037/3-500) help topic.
 
 |User Role|Available Services|
 |-------------|-------------|
@@ -33,10 +35,10 @@ The user role granted by a customer's Super Admin or the Microsoft Advertising s
 ### <a name="assign-user-roles"></a>Assign User Roles
 When signing up for a new account in the Microsoft Advertising web application, you'll be granted the Super Admin [user role](#user-roles). A Super Admin can create new users with the Advertiser Campaign Manager, Super Admin, Standard, or Viewer role. The Aggregator role is provisioned for resellers by special request through the System Administrator. For more information, see [Aggregator Hierarchy](#aggregator-hierarchy) and contact your account manager.
 
-Technically new users cannot be created programmatically; however, you can use the [SendUserInvitation](../customer-management-service/senduserinvitation.md) operation to invite people to sign up under an existing Microsoft Advertising account. When you invite someone to an account or set of accounts, you will also set the [user role](#user-roles). Microsoft Advertising generates an email invitation that is sent to the invitee. By clicking on the emailed link and completing the Microsoft Advertising signup workflow, they are accepting the invitation to manage accounts with the user role that you provisioned in the [SendUserInvitation](../customer-management-service/senduserinvitation.md) request. 
+Technically new users cannot be created programmatically; however, you can use the [SendUserInvitation](../customer-management-service/senduserinvitation.md) operation to invite people to sign up under an existing Microsoft Advertising account. When you invite someone to an account or set of accounts, you will also set the [user role](#user-roles). Microsoft Advertising generates an email invitation that is sent to the invitee. By clicking on the emailed link and completing the Microsoft Advertising sign up workflow, they are accepting the invitation to manage accounts with the user role that you provisioned in the [SendUserInvitation](../customer-management-service/senduserinvitation.md) request. 
 
 > [!NOTE]
-> A person can use the same login credentials when signing up for new accounts and accepting invitations to existing accounts. In either case when the same credentials are used to complete the signup workflow, the person is considered to have [Multi-User Credentials](#multi-user-credentials). From the perspective of each Super Admin managing users in their customer scope, the user's role, account access, and contact information are unique. Any permissions the user has in the context of another customer is not taken into account when acting within the scope of the current customer. 
+> A person can use the same login credentials when signing up for new accounts and accepting invitations to existing accounts. In either case when the same credentials are used to complete the sign up workflow, the person is considered to have [Multi-User Credentials](#multi-user-credentials). From the perspective of each Super Admin managing users in their customer scope, the user's role, account access, and contact information are unique. Any permissions the user has in the context of another customer is not taken into account when acting within the scope of the current customer. 
 
 A Super Admin has the option to modify their users' access to different accounts and potentially modify the [user role](#user-roles) e.g., from Viewer to Standard user. To update a user's role, call the [UpdateUserRoles](../customer-management-service/updateuserroles.md) operation. 
 
@@ -68,7 +70,7 @@ Each [CustomerRole](../customer-management-service/customerrole.md#roleid) repre
 - The [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) element contains identifiers of linked ad accounts that the user can access in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
 - The [CustomerLinkPermission](../customer-management-service/customerrole.md#customerlinkpermission) may limit the [user role](#user-roles) depending on the [account hierarchy](#account-hierarchy) relationship in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
 
-Taken individually, a user has the same role on the [CustomerId](../customer-management-service/customerrole.md#customerid), [AccountIds](../customer-management-service/customerrole.md#accountids), and [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) for a given [CustomerRole](../customer-management-service/customerrole.md); however, if a user has multiple customer roles then taken as a whole the effective set of permissions depend on the full set of [CustomerRole](../customer-management-service/customerrole.md) objects returned by [GetUser](../customer-management-service/getuser.md). Several examples are provided below. 
+Taken individually, a user has the same role on the [CustomerId](../customer-management-service/customerrole.md#customerid), [AccountIds](../customer-management-service/customerrole.md#accountids), and [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) for a given [CustomerRole](../customer-management-service/customerrole.md); however, if a user has multiple customer roles then taken as a whole the effective permissions depend on the full set of [CustomerRole](../customer-management-service/customerrole.md) objects returned by [GetUser](../customer-management-service/getuser.md). Several examples are provided below. 
 
 #### <a name="roles-initial-signup"></a>Roles Example for New User
 If you just signed up for the first time with Microsoft Advertising and created a new account, the [GetUser](../customer-management-service/getuser.md) operation will return one [CustomerRole](../customer-management-service/customerrole.md) object. 
@@ -213,11 +215,11 @@ The AuthenticationToken and DeveloperToken headers must be set in every request 
 ```
 
 ## <a name="multi-user-credentials"></a>Multi-User Credentials
-You can use one set of Microsoft Advertising multi-user credentials to access ad accounts across multiple customers, potentially with different user roles and permissions. By adding multi-user access to your existing user name, you effectively extend your reach by being able to access other people's accounts. The nice part: You don't need to remember another set of user names and passwords, and you don't need to log in and out of Microsoft Advertising to view different accounts owned by other people. If you accept the invitation with existing Microsoft Advertising credentials, you will have multi-user credentials. It is also possible to contact support directly and have multiple user names consolidated to a single user name i.e., one login will have multi-user permissions.
+You can use one set of Microsoft Advertising multi-user credentials to access ad accounts across multiple customers, potentially with different user roles and permissions. 
 
-Each person with multi-user credentials can be assigned a different user role (Super Admin, Standard user, Advertiser Campaign Manager, or Viewer) per customer that they are invited to. For example, your multi-user credentials grants you access to Customer A and Customer B. However, your Viewer user role for Customer A limits you from making any changes on the accounts that Belong to Customer A. But as a Super Admin for Customer B, you have full control over that customer's accounts.  
+It might help to think of "multi-user" credentials to mean "multiple user roles", since from one perspective you only login with one user name to access multipe customers with varying permissions. One person's credentials can act with multiple distinct user roles. For example, your multi-user credentials grants you access to Customer A and Customer B. However, your Viewer user role for Customer A limits you from making any changes on the accounts that Belong to Customer A. But as a Super Admin for Customer B, you have full control over that customer's accounts.  
 
-It might help to think of "multi-user" credentials to mean "multiple user roles", since from one perspective you only login with one user name to access multipe customers with varying permissions. One person's credentials can act with multiple distinct user roles. 
+If you already have multiple sets of login credentials you can ask support to [consolidate](#multi-user-consolidation) to one set of credentials. The user role and account access through each customer that you had before consolidation are retained. Also note, the same person's credentials can be associated with separate sets of user contact information i.e., unique [contact information](#multi-user-contactinfo) per customer. 
 
 For more details see the Microsoft Advertising help topic [Managing your user name to access multiple accounts](https://help.ads.microsoft.com/#apex/3/en/56867/0).
 
@@ -274,7 +276,7 @@ Search advertising businesses typically align with one or more of the following 
 - An agency builds a Bing Ads API application for their company to manage the campaigns of their advertising clients. The client of the agency owns the accounts, is billed directly by Microsoft for valid ad clicks, and may pay a fee to the agency.  
 - A reseller builds a Bing Ads API application to manage the campaigns of their advertising clients, and is billed directly by Microsoft for valid live clicks. The advertiser does not sign up for Microsoft Advertising credentials, and may pay a fee to the reseller.  
 
-Regardless of the business model, the initial signup and [user role](#user-roles) provisioning is more or less the same. The sections below discuss additional steps needed to setup [agency](#agency-hierarchy) and [aggregator](#aggregator-hierarchy) hierarchies. 
+Regardless of the business model, the initial sign up and [user role](#user-roles) provisioning is more or less the same. The sections below discuss additional steps needed to setup [agency](#agency-hierarchy) and [aggregator](#aggregator-hierarchy) hierarchies. 
 
 ### <a name="agency-hierarchy"></a>Agency Hierarchy
 An agency builds a Bing Ads API application for their company to manage the campaigns of their advertising clients. Client links enable an agency to manage some or all aspects of an advertiser account. The client link request can limit the scope to individual client ad accounts or all accounts under the customer. 
@@ -284,7 +286,7 @@ An agency builds a Bing Ads API application for their company to manage the camp
 > 
 > Only a user with Super Admin credentials can add, update, and search for client links to customers. 
 > 
-> Client links from customer to customer is only available for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449. 
+> Client links from customer to customer are only available for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449. 
 
 There is no set limit to the amount of client accounts that can be linked to an agency. For more information about becoming an agency, see the help article [Managing your clients as an agency on Microsoft Advertising](https://help.ads.microsoft.com/#apex/3/en/52083/3) or [Resources for agency partners](https://about.ads.microsoft.com/en-us/resources/agency-hub).  
 

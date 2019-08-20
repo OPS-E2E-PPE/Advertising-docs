@@ -33,4 +33,4 @@ The Customer Management service defines the following data objects.
 |[Predicate](predicate.md)|Defines a predicate for the list of entities requested using one of the search operations, for example [SearchAccounts](searchaccounts.md), [SearchClientLinks](searchclientlinks.md), [SearchCustomers](searchcustomers.md), or [SearchUserInvitations](searchuserinvitations.md).|
 |[User](user.md)|Defines personal and business contact information about a Microsoft Advertising user.|
 |[UserInfo](userinfo.md)|Defines a user identification object that contains information that identifies a user.|
-|[UserInvitation](userinvitation.md)|Defines a user invitation.|
+|[UserInvitation](userinvitation.md)|Defines an invitation for a user to sign up for Microsoft Advertising.|

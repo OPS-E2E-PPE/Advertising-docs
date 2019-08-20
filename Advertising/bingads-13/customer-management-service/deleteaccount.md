@@ -15,7 +15,7 @@ dev_langs:
 Deletes an account.
 
 > [!NOTE]
-> Only a user with Super Admin or Aggregator credentials can delete accounts. 
+> Only a user with Super Admin credentials can delete accounts. For more information, see the [User Roles](../guides/account-hierarchy-permissions.md#user-roles) technical guide.  
 
 Because the delete operation requires the time stamp of the most recent account write operation, you must first call the [GetAccount](getaccount.md) operation. The [GetAccount](getaccount.md) operation returns the account's data, which includes the time stamp. The delete call will fail if you use an old time stamp e.g., the account data is updated by your application or another application after you obtained the time stamp. 
 

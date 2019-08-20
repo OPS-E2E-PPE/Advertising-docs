@@ -11,10 +11,10 @@ Defines account access rights for a person who acts on behalf of a specific cust
 
 A person can use the same login credentials to access accounts across multiple customers, and multiple [CustomerRole](customerrole.md) objects can be returned for one person via the [GetUser](getuser.md) operation. For example, two [CustomerRole](customerrole.md) objects are returned if user@contoso.com was invited to [Customer](customer.md#id) 123 and the user also has access to manage linked accounts under [Customer](customer.md#id) 234. 
 
-Taken individually, a user has the same role on the [CustomerId](customerrole.md#customerid), [AccountIds](customerrole.md#accountids), and [LinkedAccountIds](customerrole.md#linkedaccountids) for a given [CustomerRole](customerrole.md); however, if a user has multiple customer roles then taken as a whole the effective set of permissions depend on the full set of [CustomerRoles](getuser.md#customerroles) returned by [GetUser](getuser.md). Several examples are provided below. 
+Taken individually, a user has the same role on the [CustomerId](customerrole.md#customerid), [AccountIds](customerrole.md#accountids), and [LinkedAccountIds](customerrole.md#linkedaccountids) for a given [CustomerRole](customerrole.md); however, if a user has multiple customer roles then taken as a whole the effective permissions depend on the full set of [CustomerRoles](getuser.md#customerroles) returned by [GetUser](getuser.md). Several examples are provided below. 
 
 > [!TIP]
-> Please see the [Account Hierchy and User Permissions](../guides/account-hierarchy-permissions.md) guide for an overview with examples. 
+> Please see the [Account Hierchy and User Permissions](../guides/account-hierarchy-permissions.md) guide for an overview of customer roles with examples. 
 
 ## Syntax
 ```xml
