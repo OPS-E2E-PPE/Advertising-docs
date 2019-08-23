@@ -12,7 +12,7 @@ Defines a user.
 Multiple user objects can be assigned to the same person i.e., one user per person per customer. The Name, Lcid, JobTitle, and ContactInfo user settings for the same person will be automatically synchronized with any updates that occur after user consolidation. The LastModifiedByUserId and LastModifiedTime are also in sync across each returned [User](user.md) object, unless you had an old username merged and have not updated any user settings since the consolidation. 
 
 > [!TIP]
-> With Microsoft Advertising multi-user credentials you can accept an invitation to manage a separate customer with your existing Microsoft Advertising credentials. For more information, see the [Multi-User Credentials](../guides/account-hierarchy-permissions.md#multi-user) technical guide.
+> With Microsoft Advertising multi-user credentials you can accept an invitation to manage a separate customer with your existing Microsoft Advertising credentials. For more information, see the [Multi-User Credentials](../guides/account-hierarchy-permissions.md#multi-user-credentials) technical guide.
 
 ## Syntax
 ```xml

@@ -137,7 +137,7 @@ UserLoginAccessDenied
 **Description**
 The credentials are not valid for the person who attempted to login. Please login with the primary login credentials for this person.
 
-The user credentials would have authenticated with versions prior to Bing Ads API Version 12. After [multi-user consolidation](account-hierarchy-permissions.md#multi-user) credentials that have been merged into the primary login credentials can no longer be used to authenticate in Microsoft Advertising. 
+The user credentials would have authenticated with versions prior to Bing Ads API Version 12. After [multi-user consolidation](account-hierarchy-permissions.md#multi-user-credentials) credentials that have been merged into the primary login credentials can no longer be used to authenticate in Microsoft Advertising. 
 
 ***
 
