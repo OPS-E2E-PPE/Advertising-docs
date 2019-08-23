@@ -13,6 +13,9 @@ Microsoft Advertising users can use the same login credentials to access multipl
 - [Multi-User Credentials](#multi-user-credentials) describes how you can use one set of Microsoft Advertising credentials to access ad accounts across multiple customers, potentially with different user roles and permissions. If you already have multiple sets of login credentials you can ask support to [consolidate](#multi-user-consolidation) to one set of credentials. 
 - [Account Hierarchy](#account-hierarchy) describes how you can provide access to a hierarchy of accounts for one or more users in a customer. Effectively you can manage all users and accounts from one parent account, and use one central wallet to pay for everything. Also with hierarchies, you can share campaign resources such as [Universal Event Tracking](universal-event-tracking.md) (UET) tags and remarketing lists across customers. 
 
+> [!NOTE]
+> Customer to customer [hierarchy](#account-hierarchy) is only available for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449. In the context of hierarchies a [Customer](../customer-management-service/customer.md) is also known as a "Manager account" and an [AdvertiserAccount](../customer-management-service/advertiseraccount.md) is also known as an "Ad account". 
+
 For more information about the campaign hierarchy within an account, see [Entity Limits](entity-hierarchy-limits.md), [Campaigns](campaigns.md), and [Ads](ads.md).
 
 ## <a name="user-roles-permissions"></a>User Roles and Permissions
@@ -282,9 +285,7 @@ Regardless of the business model, the initial sign up and [user role](#user-role
 An agency builds a Bing Ads API application for their company to manage the campaigns of their advertising clients. Client links enable an agency to manage some or all aspects of an advertiser account. The client link request can limit the scope to individual client ad accounts or all accounts under the customer. 
 
 > [!NOTE]
-> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. 
-> 
-> Only a user with Super Admin credentials can add, update, and search for client links to customers. 
+> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. Only a user with Super Admin credentials can add, update, and search for client links to customers. 
 > 
 > Client links from customer to customer are only available for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449. 
 
@@ -326,8 +327,8 @@ For code examples that show how to add and update a client link invitation, see 
 
 #### <a name="view-hierarchy"></a>View the Hierarchy
 An agency has several options to view the accounts hierarchy. 
- - The [GetUser](../customer-management-service/getuser.md) operation returns user roles per customer and linked accounts. The customer roles inform which customers you can access but do not always describe how you obtained the access. Determining the [user role](#user-roles) will make a difference between Administrative and Standard client links.  
- - The [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation will give you the current status of a client link if you already have the agency and client entity identifiers.  
+ - The [GetUser](../customer-management-service/getuser.md) operation returns user roles per customer and linked accounts. The customer roles inform which customers you can access but do not always describe how you obtained the access. Determining the [user role](#user-roles) will make a difference between Administrative and Standard client links. For customer role examples, see [Get User Roles](#get-user-roles). 
+ - The [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation will give you the current status of a client link if you already have the agency and client entity identifiers. For example, you can search by managing customer ID and either client account ID or client customer ID. 
  - The [GetLinkedAccountsAndCustomersInfo](../customer-management-service/getlinkedaccountsandcustomersinfo.md) operation returns the customer and account hierarchy under the specified customer. 
 
 Let's say for example, that an agency hierarchy was setup under Manager Account L1 (customer ID 111) with both customer and ad account client links:  
