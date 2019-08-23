@@ -14,7 +14,10 @@ dev_langs:
 # GetKeywordIdeas Service Operation - Ad Insight
 Gets the list of keyword ideas.
 
-Suggests new ad groups and keywords based on your existing keywords, website, and product category. You can also request historical statistics for keywords e.g., monthly searches, competition, average CPC, and ad impression share. You can use the returned suggested keyword bids as input to the [GetKeywordTrafficEstimates](getkeywordtrafficestimates.md) operation.
+Suggests new ad groups and keywords based on your existing keywords, website, and product category. You can also request historical statistics for keywords e.g., monthly searches, competition, average CPC, and ad impression share. You can use the returned suggested keyword bids as input to the [GetKeywordTrafficEstimates](getkeywordtrafficestimates.md) operation.  
+
+> [!TIP]
+> For an overview, see the [Keyword Ideas and Traffic Estimates](../guides/keyword-ideas-traffic-estimates.md) technical guide.  
 
 ## <a name="request"></a>Request Elements
 The *GetKeywordIdeasRequest* object defines the [body](#request-body) and [header](#request-header) elements of the service operation request. The elements must be in the same order as shown in the [Request SOAP](#request-soap). 

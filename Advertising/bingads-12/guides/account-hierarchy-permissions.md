@@ -7,93 +7,168 @@ ms.author: "eur"
 description: Determine user permissions for the account hierarchy. 
 ---
 # Account Hierarchy and User Permissions
-Whether you are managing your own Microsoft Advertising account as a direct advertiser, building commercial tools, or managing campaigns on behalf of other customers, we will introduce opportunities and quickly get you oriented. Manage customer, account, and user entities programmatically with the Customer Management service. For an introduction to the account and campaign hierarchy within a customer, see [Entity Limits](entity-hierarchy-limits.md).
+Microsoft Advertising users can use the same login credentials to access multiple accounts, potentially with different permissions on each account. An agency can setup a hierarchy of accounts to manage all users and accounts from one parent account, use one central wallet to pay for everything, and share campaign resources such as [Universal Event Tracking](universal-event-tracking.md) (UET) tags and remarketing lists across customers.
 
-## <a name="accountmodels"></a>User Roles and Permissions
-- developer token and API access
-- user role definitions
-- how users get added to customers e.g., sign up and acceptance post-senduserinvitation
-- customer roles examples
-  - when you first sign up
-  - agency hierarchy
-  - Aggregator hierarchy
+- [User Roles and Permissions](#user-roles-permissions) describes the actions available for each [user role](#user-roles), how [users are provisioned](#assign-user-roles) on an account, how you can [discover their current access rights](#get-user-roles), and how you can [act on behalf of an authenticated Microsoft Advertising user](#access-developer-token) with the Bing Ads API.  
+- [Multi-User Credentials](#multi-user-credentials) describes how you can use one set of Microsoft Advertising credentials to access ad accounts across multiple customers, potentially with different user roles and permissions. If you already have multiple sets of login credentials you can ask support to [consolidate](#multi-user-consolidation) to one set of credentials. 
+- [Account Hierarchy](#account-hierarchy) describes how you can provide access to a hierarchy of accounts for one or more users in a customer. Effectively you can manage all users and accounts from one parent account, and use one central wallet to pay for everything. Also with hierarchies, you can share campaign resources such as [Universal Event Tracking](universal-event-tracking.md) (UET) tags and remarketing lists across customers. 
 
-### <a name="access-developer-token"></a>Access and Developer Tokens
-The *DeveloperToken* header element is required to use the Bing Ads API. Obtaining a developer token for API access does not grant additional permissions to any Microsoft Advertising accounts. A developer token enables programmatic access to the accounts permitted for a user. Each Microsoft Advertising user is assigned a role e.g., Super Admin or Advertiser Campaign Manager for every customer they can access. The same accounts available in the Microsoft Advertising web application are available to the user programmatically through the API. For information, see [Get a Developer Token](get-started.md#get-developer-token). For information on using a Microsoft Account to authenticate with Bing Ads API, see [Authentication with OAuth](authentication-oauth.md).
+> [!NOTE]
+> Customer to customer [hierarchy](#account-hierarchy) is only available in Bing Ads API version 13 for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449. In the context of hierarchies a [Customer](../customer-management-service/customer.md) is also known as a "Manager account" and an [AdvertiserAccount](../customer-management-service/advertiseraccount.md) is also known as an "Ad account". 
+
+For more information about the campaign hierarchy within an account, see [Entity Limits](entity-hierarchy-limits.md), [Campaigns](campaigns.md), and [Ads](ads.md).
+
+## <a name="user-roles-permissions"></a>User Roles and Permissions
+Your application might only need to support one Super Admin user on a known account. Even with such a relatively simple permission structure you'll want to understand the actions available for each [user role](#user-roles), how [users are provisioned](#assign-user-roles) on an account, how you can [discover their current access rights](#get-user-roles), and how you can [act on behalf of an authenticated Microsoft Advertising user](#access-developer-token) with the Bing Ads API.  
 
 ### <a name="user-roles"></a>User Roles
-The user role granted by a customer's Super Admin or the Microsoft Advertising system administrator determines service availability. For example a user with the Advertiser Campaign Manager role may add and update campaigns, but may not create or update users. Unless otherwise noted in the reference content per service operation, the following table describes the service restrictions per user role.
+The user role granted by a customer's Super Admin or the Microsoft Advertising system administrator determines service availability. For example a user with the Advertiser Campaign Manager role can add and update campaigns, but cannot create or update users. Unless otherwise noted in the reference content per service operation, the following table describes at a high level the service restrictions per user role. 
 
-|User Role|Available Services|Provisioning|
-|-------------|----------------------|----------------|
-|Advertiser Campaign Manager|This role has permissions to view selected accounts and add, edit, or delete campaigns within the selected accounts. The Advertiser Campaign Manager can view payment methods, but cannot manage any billing and payment tasks.<br/><br/>Read operations for all services are available.<br/><br/>With the [Customer Management service](../customer-management-service/customer-management-service-operations.md), write operations are not available. The only exception is that the Advertiser Campaign Manager can update the *TrackingUrlTemplate* and *AutoTag* values in the *ForwardCompatibilityMap* element of an [AdvertiserAccount](../customer-management-service/advertiseraccount.md) using the [UpdateAccount](../customer-management-service/updateaccount.md) operation. The *Id*, *Name* and *TimeStamp* properties are read-only and required for the update; however, all other properties of the Account object are read-only and will be ignored.|A user with the Advertiser Campaign Manager role can be created by a customer's Super Admin or Aggregator in the Microsoft Advertising web application.|
-|Aggregator|Read and write operations for all services are available, except *DeleteCustomer* and [AddAccount](../customer-management-service/addaccount.md) with the [Customer Management service](../customer-management-service/customer-management-service-operations.md).|The Aggregator role is provisioned for resellers by special request through the System Administrator. For more information, see [Aggregator Hierarchy](#aggregator-hierarchy) and contact your account manager.|
-|Viewer|This role has read-only permissions.<br/><br/>Read operations for all services are available.|A user with the Viewer role can be created by a customer's Super Admin or Aggregator in the Microsoft Advertising web application.|
-|Standard user|This role has permissions to manage campaigns and perform some billing activities on selected accounts. This role cannot add, edit, or delete payment methods; create or delete accounts; or link to or unlink from clients. Standard users can also be set as the primary contact to an account.<br/><br/>Standard users can manage some users in the accounts they have access to. A Standard user can add or remove other Standard users, Advertiser Campaign Managers, and Viewers, and view information about all users in the context of the current customer. However, Standard users cannot add or delete a Super Admin, nor can they edit a Super Admin's role.<br/><br/>Read operations for all services are available.<br/><br/>With the Customer Billing and Customer Management services, with the exception of [AddInsertionOrder](../customer-billing-service/addinsertionorder.md), [UpdateInsertionOrder](../customer-billing-service/updateinsertionorder.md), and [UpdateAccount](../customer-management-service/updateaccount.md), write operations are not available.|A user with the Standard user role can be created by a customer's Super Admin or Aggregator in the Microsoft Advertising web application.|
-|Super Admin|This role has full permissions for all accounts. A Super Admin can manage everything related to billing and payments, account details, and other users (including other Super Admins). The Super Admin can specify which accounts other users have access to. When signing up as a new customer, the first user is the Super Admin.<br/><br/>Read operations for all services are available.<br/><br/>With the [Customer Management service](../customer-management-service/customer-management-service-operations.md), all operations are available except *AddAccount*, *DeleteCustomer*, *SignupCustomer*, and *UpdateUserRoles*. Write operations for all other services are available.|When signing up as a new Microsoft Advertising customer in the Microsoft Advertising web application, the first user provisioned has the Super Admin role. Thereafter the Super Admin may create new users with customer relevant roles.|
+> [!NOTE]
+> Only Super Admin and Standard users can be set as the primary contact for an account. For more details about user roles see the [How do I give someone access to my Microsoft Advertising account?](https://help.ads.microsoft.com/#apex/3/en/52037/3-500) help topic.
 
-### <a name="access-developer-token"></a>Assign User Roles
-- how users get access to customers and accounts e.g., sign up and acceptance post-senduserinvitation, e.g., updateuserroles
+|User Role|Available Services|
+|-------------|-------------|
+|Advertiser Campaign Manager|This role has permissions to view selected accounts and add, edit, or delete campaigns within the selected accounts. The Advertiser Campaign Manager can view payment methods, but cannot manage any billing and payment tasks.<br/><br/>Read operations for all services are available.<br/><br/>Write operations with the [Customer Management service](../customer-management-service/customer-management-service-operations.md) are generally not available. One exception is that the Advertiser Campaign Manager can update the [AutoTagType](../customer-management-service/advertiseraccount.md#autotagtype) element of an [AdvertiserAccount](../customer-management-service/advertiseraccount.md) using the [UpdateAccount](../customer-management-service/updateaccount.md) operation.|
+|Aggregator|Read and write operations for all services are available, except [DeleteCustomer](../customer-management-service/deletecustomer.md).|
+|Standard user|This role has permissions to manage campaigns and perform some billing activities on selected accounts. This role cannot add, edit, or delete payment methods; add or delete accounts. Standard users can link and unlink ad accounts, but cannot manage customer to customer level client links.<br/><br/>Standard users can manage some users in the accounts they have access to. A Standard user can invite or delete other Standard users, Advertiser Campaign Managers, and Viewers, and view information about all users in the context of the current customer. However, Standard users cannot invite or delete a Super Admin, nor can they edit a Super Admin's role.<br/><br/>Read operations for all services are available.<br/><br/>Write operations with the [Customer Billing service](../customer-billing-service/customer-billing-service-operations.md) and [Customer Management service](../customer-management-service/customer-management-service-operations.md) are generally not available. Exceptions of operations available to a Standard user are [AddInsertionOrder](../customer-billing-service/addinsertionorder.md), [UpdateInsertionOrder](../customer-billing-service/updateinsertionorder.md), and [UpdateAccount](../customer-management-service/updateaccount.md).|
+|Super Admin|This role has full permissions for all accounts. A Super Admin can manage everything related to billing and payments, account details, and other users (including other Super Admins). The Super Admin can specify which accounts other users have access to. When signing up as a new customer, the first user is the Super Admin.<br/><br/>Read and write operations for all services are available, except [DeleteCustomer](../customer-management-service/deletecustomer.md) and [SignupCustomer](../customer-management-service/signupcustomer.md). Write operations for all other services are available.|
+|Viewer|This role has read-only permissions.<br/><br/>Read operations for all services are available.|
 
-Users cannot be created programmatically. With the [SendUserInvitation](../customer-management-service/senduserinvitation.md) service operation, you can send an invitation for someone to manage one or more Microsoft Advertising customer accounts. When you invite a new user, you can specify the role of the user. The role determines the actions that the user can perform in Microsoft Advertising. Once the invitation is accepted, the user's Microsoft account can manage the Microsoft Advertising customer accounts with the user role that you provisioned. 
+### <a name="assign-user-roles"></a>Assign User Roles
+When signing up for a new account in the Microsoft Advertising web application, you'll be granted the Super Admin [user role](#user-roles). A Super Admin can create new users with the Advertiser Campaign Manager, Super Admin, Standard, or Viewer role. The Aggregator role is provisioned for resellers by special request through the System Administrator. For more information, see [Aggregator Hierarchy](#aggregator-hierarchy) and contact your account manager.
 
-It is possible to have multiple pending invitations sent to the same email address, which have not yet expired. It is also possible for those invitations to have specified different user roles, for example if you sent an invitation with an incorrect user role and then sent a second invitation with the correct user role. The recipient can accept any of the invitations. The Bing Ads API does not support any operations to delete pending user invitations. After you invite a user, the only way to cancel the invitation is through the Microsoft Advertising web application. You can find both pending and accepted invitations in the **Users** section of **Accounts & Billing**.
+Technically new users cannot be created programmatically; however, you can use the [SendUserInvitation](../customer-management-service/senduserinvitation.md) operation to invite people to sign up under an existing Microsoft Advertising account. When you invite someone to an account or set of accounts, you will also set the [user role](#user-roles). Microsoft Advertising generates an email invitation that is sent to the invitee. By clicking on the emailed link and completing the Microsoft Advertising sign up workflow, they are accepting the invitation to manage accounts with the user role that you provisioned in the [SendUserInvitation](../customer-management-service/senduserinvitation.md) request. 
 
-Since a recipient can accept the invitation and sign into Microsoft Advertising with a Microsoft account different than the invitation email address, you cannot determine with certainty the mapping from [UserInvitation](../customer-management-service/userinvitation.md) to accepted [User](../customer-management-service/user.md). You can search by the invitation ID (returned by [SendUserInvitation](../customer-management-service/senduserinvitation.md)), only to the extent of finding out whether or not the invitation has been accepted or has expired. The [SearchUserInvitations](../customer-management-service/searchuserinvitations.md) operation returns all pending invitations, whether or not they have expired. Accepted invitations are not included in the [SearchUserInvitations](../customer-management-service/searchuserinvitations.md) response. 
+> [!NOTE]
+> A person can use the same login credentials when signing up for new accounts and accepting invitations to existing accounts. In either case when the same credentials are used to complete the sign up workflow, the person is considered to have [Multi-User Credentials](#multi-user-credentials). From the perspective of each Super Admin managing users in their customer scope, the user's role, account access, and contact information are unique. Any permissions the user has in the context of another customer is not taken into account when acting within the scope of the current customer. 
 
-Only a Super Admin or Aggregator user can update users. Because the update operation requires the time stamp of the previous write operation that was performed against the user, you must first call the [GetUser](../customer-management-service/getuser.md) operation. The [GetUser](../customer-management-service/getuser.md) operation returns the user's data, which includes the time stamp.
+A Super Admin has the option to modify their users' access to different accounts and potentially modify the [user role](#user-roles) e.g., from Viewer to Standard user. To update a user's role, call the [UpdateUserRoles](../customer-management-service/updateuserroles.md) operation. 
 
-After you get the user object, update the data as appropriate. Because the update operation overwrites the existing user data, the user data must contain all required data; otherwise, the operation will fail.
+### <a name="get-user-roles"></a>Get User Roles
+To get a list of the users who can access one or more accounts of a customer, call the [GetUsersInfo](../customer-management-service/getusersinfo.md) operation. The operation returns an array of objects that contains the log in email address and identifier of each user. Then you can get the details of each user in the list, such as their role and account permissions in Microsoft Advertising, call the [GetUser](../customer-management-service/getuser.md) operation. When calling [GetUser](../customer-management-service/getuser.md) if you leave the *UserId* element nil, the response will include details for the current authenticated user as specified by the request header credentials. 
 
-To update a user's information, call the [UpdateUser](../customer-management-service/updateuser.md) operation. The call will fail if another user updates the user data between the time you called the [GetUser](../customer-management-service/getuser.md) and [UpdateUser](../customer-management-service/updateuser.md) operations.
-
-You cannot update a user that has been deleted. Before trying to update the user, you should check the status of the user to ensure that they have not been inactivated or deleted.
-
-Only resellers can update user roles. To update a user's role, call the [UpdateUserRoles](../customer-management-service/updateuserroles.md) operation. For users with an account role, you can add and delete the accounts that the user has access to. For users with a customer role, you can add and delete the customers that the user has access to. You can also change a user from having an account role to having a customer role or vice-versa.
-
-Only a Super Admin or Aggregator user can delete users. To delete a user, call the [DeleteUser](../customer-management-service/deleteuser.md) operation. Because the delete operation requires the time stamp of the previous write operation that was performed against the user, you must first call the [GetUser](../customer-management-service/getuser.md) operation. The [GetUser](../customer-management-service/getuser.md) operation returns the user's data, which includes the time stamp.
-
-You cannot delete a user who has already been deleted. You should check the status of the user to ensure that it is not inactive or deleted before trying to delete the user.
-
-You cannot delete a user who is specified as the primary user of one or more accounts. Before you can delete a user who is specified as the primary user of one or more accounts, set the *PrimaryUserId* element of each account to a different user. 
-
-### <a name="access-developer-token"></a>Get User Roles
-- customer roles examples
-  - when you first sign up
-  - agency hierarchy
-  - Aggregator hierarchy
-
-To get a list of the users who can access one or more accounts of a customer, call the [GetUsersInfo](../customer-management-service/getusersinfo.md) operation. The operation returns an array of objects that contains the log in email address and identifier of each user. To get the details of each user in the list, such as their role and account permissions in Microsoft Advertising, call the [GetUser](../customer-management-service/getuser.md) operation. When calling [GetUser](../customer-management-service/getuser.md) if you leave the *UserId* element nil, the response will include details for the current authenticated user as specified by the request header credentials. 
-
-The [GetUser](../customer-management-service/getuser.md) response includes a list of [CustomerRole](../customer-management-service/customerrole.md) objects named *CustomerRoles*. Each returned role is mapped to a specific customer (and a subset of accounts if applicable). 
+Here is an example [CustomerRoles](../customer-management-service/getuser.md#customerroles) element returned by the [GetUser](../customer-management-service/getuser.md) operation. 
 
 ```xml
-<CustomerRoles xmlns:e328="https://bingads.microsoft.com/Customer/v13/Entities" d4p1:nil="false" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">
-  <e328:CustomerRole>
-    <e328:RoleId>ValueHere</e328:RoleId>
-    <e328:CustomerId>ValueHere</e328:CustomerId>
-    <e328:AccountIds d4p1:nil="false" xmlns:a1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-    <a1:long>ValueHere</a1:long>
-    </e328:AccountIds>
-  </e328:CustomerRole>
+<CustomerRoles xmlns:e1335="https://bingads.microsoft.com/Customer/v12/Entities" d4p1:nil="false" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">
+  <e1335:CustomerRole>
+    <e1335:RoleId>ValueHere</e1335:RoleId>
+    <e1335:CustomerId>ValueHere</e1335:CustomerId>
+    <e1335:AccountIds d4p1:nil="false" xmlns:a1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+      <a1:long>ValueHere</a1:long>
+    </e1335:AccountIds>
+    <e1335:LinkedAccountIds d4p1:nil="false" xmlns:a1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+      <a1:long>ValueHere</a1:long>
+    </e1335:LinkedAccountIds>
+  </e1335:CustomerRole>
 </CustomerRoles>
 ```
 
+Each [CustomerRole](../customer-management-service/customerrole.md#roleid) represents the permissions that a person has when accessing the corresponding account or set of accounts.  
+- The [RoleId](../customer-management-service/customerrole.md#roleid) represents the [user role](#user-roles) e.g., 41 represents the Super Admin user role.  
+- The [CustomerId](../customer-management-service/customerrole.md#customerid) is the identifier of the customer where the user has either signed up or has some [account hierarchy](#account-hierarchy) relationship.  
+- The [AccountIds](../customer-management-service/customerrole.md#accountids) element contains identifiers of ad accounts that the user can access in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
+- The [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) element contains identifiers of linked ad accounts that the user can access in the context of the [CustomerId](../customer-management-service/customerrole.md#customerid).  
 
-To determine which customers and accounts the current user can access, call [GetUser](../customer-management-service/getuser.md) and set the UserId element nil. The [GetUser](../customer-management-service/getuser.md) response includes a list of [CustomerRole](../customer-management-service/customerrole.md) objects named *CustomerRoles*. Each returned role is mapped to a specific customer (and a subset of accounts if applicable). Other operations such as [FindAccountsOrCustomersInfo ](../customer-management-service/findaccountsorcustomersinfo.md) will return all the accounts that you can access, although please note the customer identifiers of returned objects may differ from the identifiers of customers that you can directly access as defined by each [CustomerRole](../customer-management-service/customerrole.md). This could occur for example, if you have access to an agency customer that linked to an account in a different customer via the client link setup i.e., not via multi-user credentials consolidation. 
+Taken individually, a user has the same role on the [CustomerId](../customer-management-service/customerrole.md#customerid), [AccountIds](../customer-management-service/customerrole.md#accountids), and [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) for a given [CustomerRole](../customer-management-service/customerrole.md); however, if a user has multiple customer roles then taken as a whole the effective permissions depend on the full set of [CustomerRole](../customer-management-service/customerrole.md) objects returned by [GetUser](../customer-management-service/getuser.md). Several examples are provided below. 
 
-To get a list of the customers to which the specified user can access, call the [GetCustomersInfo](../customer-management-service/getcustomersinfo.md) operation. The operation returns an array of objects that contain the name and identifier of each customer that matches the filter criteria that you specified, if any. To get the details of each customer in the list, such as the address or financial status, pass the customer identifier to the [GetCustomer](../customer-management-service/getcustomer.md) operation. You can also search for customers that match a specified filter criteria using the [SearchCustomers](../customer-management-service/searchcustomers.md) operation.
+#### <a name="roles-initial-signup"></a>Roles Example for New User
+If you just signed up for the first time with Microsoft Advertising and created a new account, the [GetUser](../customer-management-service/getuser.md) operation will return one [CustomerRole](../customer-management-service/customerrole.md) object. 
+- The [RoleId](../customer-management-service/customerrole.md#roleid) is 41 because the first user of a new account has the Super Admin [user role](#user-roles).  
+- The [CustomerId](../customer-management-service/customerrole.md#customerid) is the customer identifier provisioned when you signed up.  
+- The [AccountIds](../customer-management-service/customerrole.md#accountids) element is empty because a Super Admin can always access all ad accounts in the customer with the [CustomerId](../customer-management-service/customerrole.md#customerid) identifier.  
+- The [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) element is empty because you have not yet linked to any client ad accounts.    
 
-To get a list of the accounts that you own or manage, call the [GetAccountsInfo](../customer-management-service/getaccountsinfo.md) operation. The operation returns an array of objects that contain the name, identifier, and status of each account. To get the details of each account in the list, such as the account's financial status, pass the account identifier to the [GetAccount](../customer-management-service/getaccount.md) operation. You can also search for accounts that match a specified filter criteria using the [SearchAccounts](../customer-management-service/searchaccounts.md) operation.
+```xml
+<CustomerRoles xmlns:a="https://bingads.microsoft.com/Customer/v12/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<a:CustomerRole>
+	   <a:RoleId>41</a:RoleId>
+	   <a:CustomerId>999</a:CustomerId>
+	   <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+	   <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+	</a:CustomerRole>
+ </CustomerRoles>
+```
 
-For code examples that show how to search for accounts that can be managed by the current authenticated user, see [Search Accounts by User Code Example](code-example-search-user-accounts.md).
+#### <a name="roles-multi-user"></a>Roles Example for Multi-User Credentials
+If you accept an invitation to be a user in another customer with your existing login credentials from the previous example, you have [Multi-User Credentials](#multi-user-credentials) in Microsoft Advertising. Your login credentials directly associated with each of the customer identifiers and the [GetUser](../customer-management-service/getuser.md) operation will return two [CustomerRole](../customer-management-service/customerrole.md) objects. In this example the elements within each [CustomerRole](../customer-management-service/customerrole.md) are equivalent except for the [CustomerId](../customer-management-service/customerrole.md#customerid). The [RoleId](../customer-management-service/customerrole.md#roleid) depends on the role assigned when the Super Admin of Manager Account L1 (customer ID 111) sent you the invitation.  
 
-## <a name="multi-user"></a>Multi-User Credentials
-You can use one set of Microsoft Advertising multi-user credentials to access ad accounts across multiple customers, potentially with different user roles and permissions. By adding multi-user access to your existing user name, you effectively extend your reach by being able to access other people's accounts. The nice part: You don't need to remember another set of user names and passwords, and you don't need to log in and out of Microsoft Advertising to view different accounts owned by other people. If you accept the invitation with existing Microsoft Advertising credentials, you will have multi-user credentials. It is also possible to contact support directly and have multiple user names consolidated to a single user name i.e., one login will have multi-user permissions.
+```xml
+<CustomerRoles xmlns:a="https://bingads.microsoft.com/Customer/v12/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>999</a:CustomerId>
+      <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+  </a:CustomerRole>
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>111</a:CustomerId>
+      <a:AccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+  </a:CustomerRole>
+</CustomerRoles>
+```
 
-Each person with multi-user credentials can be assigned a different user role (Super Admin, Standard user, Advertiser Campaign Manager, or Viewer) per customer that they are invited to. For example, your multi-user credentials grants you access to Customer A and Customer B. However, your Viewer user role for Customer A limits you from making any changes on the accounts that Belong to Customer A. But as a Super Admin for Customer B, you have full control over that customer's accounts.  
+#### <a name="roles-aggregator-hierarchy"></a>Roles Example for Aggregator Hierarchy
+If you just signed up for the first time with Microsoft Advertising, obtained [Aggregator](#aggregator-hierarchy) credentials, and created one new customer and ad account via [SignupCustomer](../customer-management-service/signupcustomer.md), the [GetUser](../customer-management-service/getuser.md) operation will return two [CustomerRole](../customer-management-service/customerrole.md) objects. The elements within each [CustomerRole](../customer-management-service/customerrole.md) are equivalent except for the [RoleId](../customer-management-service/customerrole.md#roleid). An Aggregator has two role identifiers in Microsoft Advertising i.e., 41 and 33. 
+- The [RoleId](../customer-management-service/customerrole.md#roleid) in one of the [CustomerRole](../customer-management-service/customerrole.md) objects is 41 because the first user of a new account has the Super Admin [user role](#user-roles). The [RoleId](../customer-management-service/customerrole.md#roleid) in another of the [CustomerRole](../customer-management-service/customerrole.md) objects is 33 which represents the Aggregator [user role](#user-roles). 
+- The [CustomerId](../customer-management-service/customerrole.md#customerid) is the customer identifier provisioned when you signed up.  
+- The [AccountIds](../customer-management-service/customerrole.md#accountids) element is empty because a Super Admin can always access all ad accounts in the customer with the [CustomerId](../customer-management-service/customerrole.md#customerid) identifier.  
+- The [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) element contains the identifer of the ad account in the child customer that you created via [SignupCustomer](../customer-management-service/signupcustomer.md). The child customer identifier is not represented in the [CustomerRole](../customer-management-service/customerrole.md) object. You can call [GetAccount](../customer-management-service/getaccount.md) to get ad account details such as its' [ParentCustomerId](../customer-management-service/advertiseraccount.md#parentcustomerid).    
 
-It might help to think of "multi-user" credentials to mean "multiple user roles", since from one perspective you only login with one user name to access multipe customers with varying permissions. One person's credentials can act with multiple distinct user roles. 
+```xml
+<CustomerRoles xmlns:a="https://bingads.microsoft.com/Customer/v12/Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+  <a:CustomerRole>
+      <a:RoleId>33</a:RoleId>
+      <a:CustomerId>111</a:CustomerId>
+      <a:AccountIds i:nil="true" xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+        <b:long>111222</b:long>                  
+      </a:LinkedAccountIds>
+  </a:CustomerRole>
+  <a:CustomerRole>
+      <a:RoleId>41</a:RoleId>
+      <a:CustomerId>111</a:CustomerId>
+      <a:AccountIds i:nil="true" xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays"/>
+      <a:LinkedAccountIds xmlns:b="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+        <b:long>111222</b:long>                  
+      </a:LinkedAccountIds>
+  </a:CustomerRole>
+</CustomerRoles>
+```
+
+### <a name="access-developer-token"></a>Access and Developer Tokens
+To programmatically act on behalf of a Microsoft Advertising user, you must obtain their consent. At the end of the consent workflow you can get an access token that represents the user. The access token has the same roles and access to the same accounts as the user has in the Microsoft Advertising web application. In other words, the same accounts and user role permissions available in the Microsoft Advertising web application are available to the user programmatically through the API. For information on getting an access token to act on behalf of a Microsoft Advertising user, see [Authentication with OAuth](authentication-oauth.md). 
+
+You'll also need a developer token that uniquely identifies your application. Obtaining a developer token for API access does not grant additional permissions to any Microsoft Advertising accounts. A developer token enables programmatic access to the accounts already provisioned for a user. For information, see [Get a Developer Token](get-started.md#get-developer-token). 
+
+> [!TIP]
+> To get an access token and make your first service call using the Bing Ads API, see the [Quick Start](get-started.md#quick-start) sample. 
+
+The AuthenticationToken and DeveloperToken headers must be set in every request via the Bing Ads API. Here is an example call to the [GetUser](../customer-management-service/getuser.md) operation. 
+
+```xml
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v12="https://bingads.microsoft.com/Customer/v12">
+  <soapenv:Header>
+      <v12:DeveloperToken>DeveloperTokenGoesHere</v12:DeveloperToken>
+      <v12:AuthenticationToken>AccessTokenGoesHere</v12:AuthenticationToken>
+  </soapenv:Header>
+  <soapenv:Body>
+      <v12:GetUserRequest>
+        <v12:UserId xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      </v12:GetUserRequest>
+  </soapenv:Body>
+</soapenv:Envelope>
+```
+
+## <a name="multi-user-credentials"></a>Multi-User Credentials
+You can use one set of Microsoft Advertising multi-user credentials to access ad accounts across multiple customers, potentially with different user roles and permissions. 
+
+It might help to think of "multi-user" credentials to mean "multiple user roles", since from one perspective you only login with one user name to access multipe customers with varying permissions. One person's credentials can act with multiple distinct user roles. For example, your multi-user credentials grants you access to Customer A and Customer B. However, your Viewer user role for Customer A limits you from making any changes on the accounts that Belong to Customer A. But as a Super Admin for Customer B, you have full control over that customer's accounts.  
+
+If you already have multiple sets of login credentials you can ask support to [consolidate](#multi-user-consolidation) to one set of credentials. The user role and account access through each customer that you had before consolidation are retained. Also note, the same person's credentials can be associated with separate sets of user contact information i.e., unique [contact information](#multi-user-contactinfo) per customer. 
 
 For more details see the Microsoft Advertising help topic [Managing your user name to access multiple accounts](https://help.ads.microsoft.com/#apex/3/en/56867/0).
 
@@ -115,7 +190,9 @@ First please note that only one email address per customer can be consolidated, 
   * After multi-user consolidation the access token for user one@contoso.com will represent permissions to the consolidated list (superset) of accounts. The user role in effect will depend on the customer and account identifiers specified in the service request. Access tokens for two@contoso.com and three@contoso.com will no longer be accepted i.e., error 120 - UserLoginAccessDenied will be returned. 
 
 ### <a name="multi-user-contactinfo"></a>Multi-User Contact Info
-A person with multi-user credentials is represented by multiple [User](../customer-management-service/user.md) objects and corresponding user identifiers. The [GetUser](../customer-management-service/getuser.md) response can vary depending on who makes the call, even with the same user identifier. Let's say for example, that prior to consolidation the identifiers for one@contoso.com, two@contoso.com, and three@contoso.com were 123, 456, and 789 respectively. Each user identifier effectively maps a person to a specific customer e.g., identifier 123 maps one@contoso.com to the original customer that the person could access. In this example we refer to 123 as the original user identifier. 
+A person with multi-user credentials is represented by multiple [User](../customer-management-service/user.md) objects and corresponding user identifiers. In effect, the same person's credentials can be associated with separate sets of user contact information i.e., unique contact information per customer. 
+
+The [GetUser](../customer-management-service/getuser.md) response can vary depending on who makes the call, even with the same user identifier. Let's say for example, that prior to consolidation the identifiers for one@contoso.com, two@contoso.com, and three@contoso.com were 123, 456, and 789 respectively. Each user identifier effectively maps a person to a specific customer e.g., identifier 123 maps one@contoso.com to the original customer that the person could access. In this example we refer to 123 as the original user identifier. 
 
 - If the access token for one@contoso.com is used to call [GetUser](../customer-management-service/getuser.md), and the UserId is nil or UserId is set to the original user identifier (e.g., 123), the operation will return [CustomerRole](../customer-management-service/customerrole.md) objects for all customers that the user can access. 
 - If the access token for one@contoso.com is used to call [GetUser](../customer-management-service/getuser.md), and the UserId is set to either 456 or 789, the operation will only return one [CustomerRole](../customer-management-service/customerrole.md) object that maps this person to a specific customer. 
@@ -142,59 +219,57 @@ Now let's say that one@contoso.com is acting in the context of Customer B and up
 |789|890|Customer C - Account A|456|
 
 ## <a name="account-hierarchy"></a>Account Hierarchy
-- direct advertiser model via ad accounts under one customer
-- agency model via account and customer links
-- Aggregator model via signupcustomer
-
 Search advertising businesses typically align with one or more of the following account management models. 
 - A direct advertiser builds a Bing Ads API application for its own advertising campaigns and is billed directly by Microsoft for valid ad clicks.  
 - A tool provider builds a Bing Ads API application for other companies to manage their advertising campaigns, and is not billed by Microsoft. The advertiser user owns the accounts, is billed directly by Microsoft for valid ad clicks, and may pay a fee to the tool provider.  
 - An agency builds a Bing Ads API application for their company to manage the campaigns of their advertising clients. The client of the agency owns the accounts, is billed directly by Microsoft for valid ad clicks, and may pay a fee to the agency.  
 - A reseller builds a Bing Ads API application to manage the campaigns of their advertising clients, and is billed directly by Microsoft for valid live clicks. The advertiser does not sign up for Microsoft Advertising credentials, and may pay a fee to the reseller.  
 
+Regardless of the business model, the initial sign up and [user role](#user-roles) provisioning is more or less the same. The sections below discuss additional steps needed to setup [agency](#agency-hierarchy) and [aggregator](#aggregator-hierarchy) hierarchies. 
+
 ### <a name="agency-hierarchy"></a>Agency Hierarchy
-An agency builds a Bing Ads API application for their company to manage the campaigns of their advertising clients. Agencies may manage some or all aspects of an advertiser account. When sending the invitation to manage a client account, the agency may specify whether the client or agency is responsible for billing. For more information about becoming an agency, see the help article [Managing your clients as an agency on Microsoft Advertising](https://help.ads.microsoft.com/#apex/3/en/52083/3) or [Resources for agency partners](https://about.ads.microsoft.com/en-us/resources/agency-hub).
+An agency builds a Bing Ads API application for their company to manage the campaigns of their advertising clients. Client links enable an agency to manage some or all aspects of an advertiser account. The client link request can limit the scope to individual client ad accounts or all accounts under the customer. 
 
 > [!NOTE]
-> The client account must be set up for post-pay billing. Prepaid accounts are not supported for management by agencies.
+> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. Only a user with Super Admin credentials can add, update, and search for client links to customers. 
+> 
+> Client links from customer to customer are only available in Bing Ads API version 13 for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449. 
 
-Only an agency Super Admin can add, update, and search for client links. Linking enables any agency Super Admin to access the specified client account. If the client has multiple accounts, then a client link invitation must be sent for each client account. The Super Admin may also determine which individual accounts the Advertiser Campaign Manager and Viewer users can access. In the figure above **User A** has access to account A1, and **User B** has access to accounts A2, B1, and B2. For more information, see [User Roles](#user-roles) technical guide.
+There is no set limit to the amount of client accounts that can be linked to an agency. For more information about becoming an agency, see the help article [Managing your clients as an agency on Microsoft Advertising](https://help.ads.microsoft.com/#apex/3/en/52083/3) or [Resources for agency partners](https://about.ads.microsoft.com/en-us/resources/agency-hub).  
 
-#### <a name="clientlink"></a>Link to Client Accounts
+#### <a name="clientlink"></a>Setup the Hierarchy
 
-To manage client accounts, a Super Admin user of the agency must send an invitation to the client, which must then be accepted by a Super Admin user of the client. To determine whether a link already exists, call the [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation and check the Status element of any returned [ClientLink](../customer-management-service/clientlink.md). For a list of possible status values, see [ClientLinkStatus value set](../customer-management-service/clientlinkstatus.md). To search by individual account, set the predicate field to ClientAccountId and set the predicate value to the account identifier that you want to find. There is no set limit to the amount of client accounts that can be linked to an agency.
+To setup a hierarchy to manage client accounts, the agency must send an invitation to the client, which must then be accepted by an authorized user in the client customer. To determine whether a link already exists, call the [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation and check the Status element of any returned [ClientLink](../customer-management-service/clientlink.md). To search by individual account, set the predicate field to ClientAccountId and set the predicate value to the account identifier that you want to find. 
 
-If a link exists with status either Active, LinkAccepted, LinkInProgress, LinkPending, UnlinkInProgress, or UnlinkPending, the agency may not initiate a duplicate client link.
+If a link exists with status either Active, LinkAccepted, LinkInProgress, LinkPending, UnlinkInProgress, or UnlinkPending, the agency cannot initiate a duplicate client link.
 
-If a client link to the specified account does not yet exist, or if the lifecycle of an existing link had ended with status of Expired, LinkCanceled, LinkDeclined, LinkFailed, or Inactive, then the agency may initiate a new client link invitation by calling the [AddClientLinks](../customer-management-service/addclientlinks.md) operation. The service transitions client link status to LinkPending immediately.
+If a client link to the specified account does not yet exist, or if the lifecycle of an existing link had ended with status of Expired, LinkCanceled, LinkDeclined, LinkFailed, or Inactive, then the agency can initiate a new client link invitation by calling the [AddClientLinks](../customer-management-service/addclientlinks.md) operation. The service transitions client link status to LinkPending immediately.
 
 > [!IMPORTANT]
-> The agency may specify whether the client or agency is responsible for billing by setting the *IsBillToClient* element in the service request. If not otherwise specified, the agency will be billed.
+> For ad account client links, the agency must specify whether the client or agency will be responsible for billing by setting the [IsBillToClient](../customer-management-service/clientlink.md#isbilltoclient) element in the client link request.  
 
-To update a client link, the *TimeStamp* element is required for validation, so you must first call the [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation to get the existing *ClientLink* object. Then modify the *Status* element of the returned *ClientLink*, and include the updated *ClientLink* object in a subsequent call to the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation.
-
-The client may only use the *UpdateClientLinks* operation to update the status as LinkAccepted or LinkDeclined.
+To update a client link, its [TimeStamp](../customer-management-service/clientlink.md#timestamp) element is required for validation, so you must first call the [SearchClientLinks](../customer-management-service/searchclientlinks.md) operation to get the existing [ClientLink](../customer-management-service/clientlink.md) object. Then modify the [Status](../customer-management-service/clientlink.md#status) element of the returned [ClientLink](../customer-management-service/clientlink.md), and include the updated [ClientLink](../customer-management-service/clientlink.md) object in a subsequent call to the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation.
 
 > [!NOTE]
-> The client may accept or decline through an application built on the Bing Ads API, or through the **Accounts & Billing** tab in the Microsoft Advertising web application. In either case the client credentials must be used to accept or decline. For more information, see the Microsoft Advertising help article [Managing your clients as an agency on Microsoft Advertising](https://help.ads.microsoft.com/#apex/3/en/52083/3).
+> The client can accept or decline through an application built on the Bing Ads API, or through the **Accounts & Billing** tab in the Microsoft Advertising web application. 
 
-If the client sets the status to LinkDeclined, the client link lifecycle ends. You may not update a declined client link, and you must send a new invitation to manage the client account. If the client sets the status to LinkAccepted, the status transitions to LinkInProgress. If the link process succeeds, the service updates the client link status to Active.
+The client can only use the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation to update the status as LinkAccepted or LinkDeclined.
+- If the client sets the status to LinkDeclined, the client link lifecycle ends. You cannot update a declined client link, and you must send a new invitation to manage the client account. 
+- If the client sets the status to LinkAccepted, the status transitions to LinkInProgress. If the link process succeeds, the service updates the client link status to Active.
 
-If the link process fails, possibly due to a billing transition error, the service updates the client link status to LinkFailed. You may not update a failed client link, and you must send a new invitation to manage the client account.
-
-If the client or agency does not take action within 30 days, the service sets the status to LinkExpired and the client link lifecycle ends. You may not update an expired client link, and you must send a new invitation to manage the client account.
+If the link cannot be established for example, due to a billing transition error, the service updates the client link status to LinkFailed. You cannot update a failed client link, and you must send a new invitation to manage the client account. If the client or agency does not take action within 30 days, the service sets the status to LinkExpired and the client link lifecycle ends. You cannot update an expired client link, and you must send a new invitation to manage the client account.
 
 ![Link to Client](media/client-link-status-flow.png "Link to Client")
 
-If the client link status is LinkPending, the agency may choose to cancel a prior link request. If the client link status is Active, the agency may choose to initiate the unlink process, which would terminate the existing relationship with the client.
+If the client link status is LinkPending, the agency can choose to cancel a prior link request. 
 
-To initiate the unlink process, the agency sets the client link status to UnlinkRequested and calls the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation. Updating the status with UnlinkRequested effectively sets the status to UnlinkInProgress. The service transitions client link status to UnlinkPending immediately, and then waits for system resources to proceed. The state should transition quickly to UnlinkInProgress.
+If the client link status is Active, the agency can choose to terminate the existing relationship with the client. To initiate the unlink process, the agency sets the client link status to UnlinkRequested and calls the [UpdateClientLinks](../customer-management-service/updateclientlinks.md) operation. Updating the status with UnlinkRequested effectively sets the status to UnlinkInProgress. The service transitions client link status to UnlinkPending immediately, and then waits for system resources to proceed. The state should transition quickly to UnlinkInProgress.
 
-If the unlink process fails, possibly due to a billing transition error, the client link resumes to Active status. If the unlink process succeeds the status will update to Inactive, and the client link lifecycle ends. You may not update an inactive client link, and you must send a new invitation to manage the client account.
+If the unlink process fails for example, due to a billing transition error, the client link resumes to Active status. If the unlink process succeeds the status will update to Inactive, and the client link lifecycle ends. You cannot update an inactive client link, and you must send a new invitation to manage the client account.
 
 ![Unlink from Client](media/client-unlink-status-flow.png "Unlink from Client")
 
-For code examples that show how to add and update a client link invitation, see [Client Links Code Example](code-example-client-links.md).
+For code examples that show how to add and update a client link invitation, see [Client Links Code Example](code-example-client-links.md).  
 
 ### <a name="aggregator-hierarchy"></a>Aggregator Hierarchy
 The reseller role is offered to a limited set of partners that offer search-marketing tools and services to a large number of advertisers. The reseller role allows partners to programmatically create new customer accounts. The reseller is billed by invoice for all advertising costs incurred by their clients. The advertiser typically does not sign up for Microsoft Advertising credentials, and may pay a fee to the reseller. 
