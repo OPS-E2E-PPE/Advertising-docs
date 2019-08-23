@@ -12,7 +12,11 @@ See below for information about changes to Bing Ads API Version 13 by month.
 ## <a name="august2019"></a>August 2019
 See below for Bing Ads API updates during this calendar month. 
 
+- [Audience Association Level in Reports](#associationlevel-reporting-august2019)  
 - [Bing Ads API SDK Updates](#sdk-august2019)  
+
+### <a name="associationlevel-reporting-august2019"></a>Audience Association Level in Reports
+The AssociationLevel column is added to the [AudiencePerformanceReportColumn](../reporting-service/audienceperformancereportcolumn.md) value set. 
 
 ### <a name="sdk-august2019"></a>Bing Ads API SDK Updates
 The Bing Ads .NET, Java, Php, and Python SDKs are updated. For details please see release notes for Microsoft Advertising [.NET](https://github.com/BingAds/BingAds-dotNet-SDK/releases/tag/v12.13.4), [Java](https://github.com/BingAds/BingAds-Java-SDK/releases/tag/v12.13.4), [Php](https://github.com/BingAds/BingAds-PHP-SDK/releases/tag/v0.12.13.4), and [Python](https://github.com/BingAds/BingAds-Python-SDK/releases/tag/v12.13.4) SDK version 12.13.4. 
