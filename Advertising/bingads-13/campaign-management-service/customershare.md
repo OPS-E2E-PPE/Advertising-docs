@@ -7,7 +7,10 @@ ms.author: eur
 description: Reserved for future use.
 ---
 # CustomerShare Data Object - Campaign Management
-Reserved for future use.
+Reserved for future use. 
+
+> [!NOTE]
+> Customer to customer [hierarchy](#account-hierarchy) is only available for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449.  
 
 ## Syntax
 ```xml

@@ -183,6 +183,18 @@ To add, get, update, or delete the association between your audience and ad grou
 
 By default ads in a campaign and ad group can show to everyone, but the bid adjustment will apply to people included in the audience. If you only want the ads to show to people included in the audience, you'll want to set the "target and bid" target setting. You can use the *Settings* element of the [Campaign](../campaign-management-service/campaign.md) or [AdGroup](../campaign-management-service/adgroup.md) object to determine the target setting that is applicable for all audiences (i.e., custom audiences, in-market audiences, product audiences, remarketing lists, and similar audiences for remarketing lists) that are associated with the campaign or ad group. Each audience can be associated with multiple campaigns and ad groups, and each target setting is applied independently for delivery. 
 
+## <a name="hierarchy-share"></a>Share Audiences and UET Tags
+
+> [!NOTE]
+> Customer to customer [hierarchy](#account-hierarchy) is only available for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449.  
+
+Here are some rules for audience associations that depend on a UET Tag:
+	- A UET Tag can only be shared at the customer level aka manager account level. You cannot share a UET Tag with any specific ad account. 
+	- Once you choose the account level scope you cannot update the audience to use one of the customer level scopes, and vice versa. For example, if you choose "Shared with selected manager accounts and ad accounts", the "Only used by Ad Account Foo (Bar)" option will no longer be available. 
+	- You can share UET tags and audiences with a subset of your hierarchy. For example, let's say that you have a hierarchy top to bottom from Manager Account L1 to Manager Account L2 to Manager Account L3. You can share the UET tag and audience owned by Manager Account L1 with Manager Account L3 only, and you are not required to share any with the intermediary Manager Account L2. Later if Manager Account L4 is added to the hierarchy below Manager Account L3, the UET tag and audience are not automatically shared. If that is your goal, you would need to share the UET tag and audience with Manager Account L4 explicitly.  
+	- An audience can only be shared by the same set of accounts that already share the associated UET Tag. For example, if the UET Tag that you want to associate with an audience is only shared by Manager Account L1 and Manager Account L3, you cannot share the audience with Manager Account L2. 
+	- Only the owner can update or delete a UET tag or audience. Even users who have permission to access multiple customers must authenticate using the tag or audience owner's customer ID in the request header. 
+
 ## See Also
 
 [Bing Ads API Web Service Addresses](web-service-addresses.md)  
