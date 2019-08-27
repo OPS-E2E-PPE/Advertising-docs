@@ -17,7 +17,7 @@ Do not try to instantiate an *Audience*. You can create one or more following ob
 - [SimilarRemarketingList](similarremarketinglist.md)  
 
 > [!NOTE]
-> Microsoft Advertising will automatically generate similar remarketing lists for pilot participants. You cannot create or edit the similar remarketing lists. 
+> Microsoft Advertising will automatically generate similar audiences for remarketing lists for pilot participants i.e., [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 317.
 
 ## Syntax
 ```xml
@@ -44,7 +44,7 @@ Do not try to instantiate an *Audience*. You can create one or more following ob
 |Element|Description|Data Type|
 |-----------|---------------|-------------|
 |<a name="audiencenetworksize"></a>AudienceNetworkSize|The total number of people who are active members of this audience in the Audience network. This gives you an idea of how many Audience network users you can target.<br/><br/>Please see more details in documentation for the objects that inherit this element e.g., [RemarketingList](remarketinglist.md#audiencenetworksize).|**long**|
-|<a name="customershare"></a>CustomerShare|Reserved for future use.|[CustomerShare](customershare.md)|
+|<a name="customershare"></a>CustomerShare|Determines the list of customers and accounts that share the audience. Details include audience association counts.<br/><br/>This element is only supported with a [RemarketingList](remarketinglist.md#customershare). Audiences of other types cannot be shared in the customer hierarchy.|[CustomerShare](customershare.md)|
 |<a name="description"></a>Description|The description of the audience. Use a description to help you remember what audience you are targeting.<br/><br/>The description can contain a maximum of 1,024 characters.|**string**|
 |<a name="forwardcompatibilitymap"></a>ForwardCompatibilityMap|The list of key and value strings for forward compatibility to avoid otherwise breaking changes when new elements are added in the current API version.<br/><br/>Forward compatibility changes will be noted here in future releases. There are currently no forward compatibility changes for this object.|[KeyValuePairOfstringstring](keyvaluepairofstringstring.md) array|
 |<a name="id"></a>Id|The Microsoft Advertising identifier of the audience.|**long**|

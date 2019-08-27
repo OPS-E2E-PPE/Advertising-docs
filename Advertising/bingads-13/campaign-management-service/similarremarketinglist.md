@@ -10,7 +10,7 @@ description: Defines an audience that is similar to one of your remarketing list
 Defines an audience that is similar to one of your remarketing lists.
 
 > [!NOTE]
-> Microsoft Advertising will automatically generate similar audiences for remarketing lists if you are a pilot participant. You cannot create or edit the similar audience for a remarketing list. Having said that, you can add and delete similar remarketing list associations and exclusions. If you delete the source remarketing list, then the similar audience will also be deleted. If a similar audience is associated with a campaign or ad group, then you cannot delete the source remarketing list. 
+> Microsoft Advertising will automatically generate similar audiences for remarketing lists for pilot participants i.e., [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 317. You cannot create or edit the similar audience for a remarketing list. Having said that, you can add and delete similar remarketing list associations and exclusions. If you delete the source remarketing list, then the similar audience will also be deleted. If a similar audience is associated with a campaign or ad group, then you cannot delete the source remarketing list. 
 
 ## Syntax
 ```xml
@@ -41,7 +41,7 @@ The [SimilarRemarketingList](similarremarketinglist.md) object derives from the 
 |Element|Description|Data Type|
 |-----------|---------------|-------------|
 |<a name="audiencenetworksize"></a>AudienceNetworkSize|The total number of people who are active members of this audience in the Audience network. This gives you an idea of how many Audience network users you can target.<br/><br/>The audience needs to have at least 300 people before Microsoft Advertising will use it for optimizations.<br/><br/>The audience network size of a similar audience can differ from the audience network size of the [source](#sourceid) remarketing list.<br/><br/>**Add:** Not supported<br/>**Update:** Not supported|**long**|
-|<a name="customershare"></a>CustomerShare|Reserved for future use.|[CustomerShare](customershare.md)|
+|<a name="customershare"></a>CustomerShare|This element is not supported for similar remarketing lists.<br/><br/>**Add:** Not supported<br/>**Update:** Not supported|[CustomerShare](customershare.md)|
 |<a name="description"></a>Description|This element is not applicable for similar audiences.<br/><br/>**Add:** Not supported<br/>**Update:** Not supported|**string**|
 |<a name="forwardcompatibilitymap"></a>ForwardCompatibilityMap|The list of key and value strings for forward compatibility to avoid otherwise breaking changes when new elements are added in the current API version.<br/><br/>Forward compatibility changes will be noted here in future releases. There are currently no forward compatibility changes for the *Audience* object.<br/><br/>**Add:** Not supported<br/>**Update:** Not supported|[KeyValuePairOfstringstring](keyvaluepairofstringstring.md) array|
 |<a name="id"></a>Id|The Microsoft Advertising identifier of the similar audience.<br/><br/>**Add:** Not supported<br/>**Update:** Not supported|**long**|
