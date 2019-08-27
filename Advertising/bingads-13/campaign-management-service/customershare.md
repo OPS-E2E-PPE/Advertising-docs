@@ -15,7 +15,7 @@ Defines a shareable audience or UET tag that a customer owns.
 > Shared UET tags and audiences also require customer hierarchy feature enablement. Customer to customer [hierarchy](#account-hierarchy) is only available for pilot customers where [GetCustomerPilotFeatures](../customer-management-service/getcustomerpilotfeatures.md) returns feature identifier 449.  
 
 > [!TIP]
-> For an overview of sharing audiences and UET tags in a customer hierarchy, see the [Share Audiences and UET Tags](../guides/universal-event-tracking.md#hierarchyshare) technical guide. 
+> For an overview of sharing audiences and UET tags in a customer hierarchy, see the [Share Audiences and UET Tags](../guides/universal-event-tracking.md#hierarchy-share) technical guide. 
 
 ## Syntax
 ```xml
