@@ -138,7 +138,7 @@ See below for Bing Ads API updates during this calendar month.
 - [Bing Ads API SDK Updates](#sdk-may2019)  
 
 ### <a name="assistedconversions-may2019"></a>Assisted Conversions
-Assisted conversions are conversions resulting from the clicks on your ads that have received co-bids from your manufacturer partners. This performance statistic is only applicable for cooperative shopping campaigns. The AssistedConversions column is added to the following report column value sets.
+Assisted conversions are conversions resulting from the clicks on your ads that have received co-bids from your manufacturer partners. This performance statistic is only available for Sponsored Products in Microsoft Shopping Campaigns. The AssistedConversions column is added to the following report column value sets.
 
 - [ProductDimensionPerformanceReportColumn](../reporting-service/productdimensionperformancereportcolumn.md)  
 - [ProductPartitionPerformanceReportColumn](../reporting-service/productpartitionperformancereportcolumn.md)  

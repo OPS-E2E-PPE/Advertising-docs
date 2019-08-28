@@ -354,7 +354,7 @@ See below for Bing Ads API updates during this calendar month.
 - [Linked Account Ids per Customer Role](#linkedaccountids-june2018)
 
 ### <a name="sdk-june2018"></a>Bing Ads API SDK Updates
-The Bing Ads .NET, Java, and Python SDKs are updated to extend support for [Cooperative Bidding](product-ads.md#setup-cooperative) i.e., the BulkAdGroup now supports the coop setting. 
+The Bing Ads .NET, Java, and Python SDKs are updated to extend support for [Sponsored Products](product-ads.md#setup-cooperative) i.e., the BulkAdGroup now supports the coop setting. 
 
 ### <a name="linkedaccountids-june2018"></a>Linked Account Ids per Customer Role
 The [LinkedAccountIds](../customer-management-service/customerrole.md#linkedaccountids) element is added to the [CustomerRole](../customer-management-service/customerrole.md) object. For agency users the element contains a list of linked accounts that the user can access as an agency on behalf of another customer. 
