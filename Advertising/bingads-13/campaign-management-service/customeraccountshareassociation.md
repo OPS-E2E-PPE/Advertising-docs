@@ -4,7 +4,7 @@ ms.service: bing-ads-campaign-management-service
 ms.topic: article
 author: eric-urban
 ms.author: eur
-description: Contains the association count for the corresponding usage type. 
+description: Contains the association count for the corresponding usage type.
 ---
 # CustomerAccountShareAssociation Data Object - Campaign Management
 Contains the association count for the corresponding usage type. 
