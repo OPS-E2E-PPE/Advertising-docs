@@ -108,6 +108,7 @@ For an *Ad Group Product Partition* record, the following attribute fields are a
 
 - [Ad Group](#adgroup)
 - [Bid](#bid)
+- [Bid Adjustment](#bidadjustment)
 - [Campaign](#campaign)
 - [Client Id](#clientid)
 - [Custom Parameter](#customparameter)
@@ -137,8 +138,27 @@ The name of the ad group that contains the product partition.
 ## <a name="bid"></a>Bid
 The amount to bid in the auction.
 
-**Add:** Required if [Is Excluded](#isexcluded) is *FALSE* and the [Sub Type](#subtype) is *Unit*, and otherwise the bid is not allowed.  
+> [!NOTE]
+> For ad groups in Microsoft Shopping Campaigns that are setup for Cooperative bidding, this field is not applicable if the ad group's [Bid Option](ad-group.md#bidoption) is set to BidBoost. Please see [Bid Adjustment](#bidadjustment) for more information.  
+
+**Add:** Required if [Is Excluded](#isexcluded) is *FALSE* and the [Sub Type](#subtype) is *Unit*, and otherwise the bid is not allowed.       
 **Update:** Optional. If no value is set for the update, this setting is not changed.    
+**Delete:** Read-only  
+
+## <a name="bidadjustment"></a>Bid Adjustment
+The percentage (greater than zero) that allows your cooperative bid to flex.
+
+For example, let's say your partner bids $5 USD in their product group (via the [Bid](#bid) field). If your bid adjustment (this field) is set to 20 (percent) and your ad group's [Maximum Bid](ad-group.md#maximumbid) is 0.50 (50 cents), your share would be 50 cents and not $1 USD. 
+
+This field is only applicable if the ad group's [Bid Option](ad-group.md#bidoption) is set to BidBoost. If the ad group's [Bid Option](ad-group.md#bidoption) is set to BidValue, the auction uses the product group's [Bid](#bid). 
+
+Supported values are negative ninety (-90) through positive nine hundred (900). 
+
+> [!NOTE]
+> This setting is only applicable for ad groups in Microsoft Shopping Campaigns that are setup for Cooperative bidding. Not everyone is enabled for Cooperative bidding yet. If you don't, don't worry. It's coming soon.
+
+**Add:** Optional. The bid adjustment will be set to the default of *0* if not included.  
+**Update:** Required  
 **Delete:** Read-only  
 
 ## <a name="campaign"></a>Campaign
