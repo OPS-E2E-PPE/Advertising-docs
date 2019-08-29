@@ -23,16 +23,16 @@ BBD37VB98
 
 Although in production you must use your own application ID (a.k.a. client ID), all Microsoft Advertising customers can use the following public application ID in sandbox. 
 
-> [!NOTE]
-> The "Sandbox Tutorial App" client ID is limited to desktop or console applications, and cannot be used with any client secret in a web application. You can use this for testing authentication locally in sandbox, and then register your own production application for more advance scenarios e.g., web applications with custom redirect URIs. 
-
 ```string
 db41b09d-6e50-4f4a-90ac-5a99caefb52f
 ```
 
-To authenticate with a Microsoft Account in sandbox you will follow the same work flow as described in [Live Connect](authentication-oauth-live-connect.md) for production; however, you will use different endpoints.
+> [!NOTE]
+> The "Sandbox Tutorial App" client ID is limited to desktop or console applications, and cannot be used with any client secret in a web application. You can use this for testing authentication locally in sandbox, and then register your own production application for more advanced scenarios e.g., web applications with custom redirect URIs. 
+> 
+> Note the sandbox application registration site at [apps.dev.microsoft-int.com/#/appList](https://apps.dev.microsoft-int.com/#/appList) has been deprecated since May 2019 and functionality for registering and managing converged applications removed starting September 2019.
 
-For the sandbox environment, the following are the endpoints you must use to get Microsoft accounts and your application's client ID. Wherever you see endpoints mentioned in [Live Connect](authentication-oauth-live-connect.md), substitute them with the sandbox endpoints. 
+To authenticate with a Microsoft Account in sandbox you will follow the same work flow as described in [Live Connect](authentication-oauth-live-connect.md) for production; however, you will use different endpoints. Wherever you see endpoints mentioned in [Live Connect](authentication-oauth-live-connect.md), substitute them with the following sandbox endpoints. 
 
 > [!NOTE]
 > For Bing Ads API sandbox the [Live Connect](authentication-oauth-live-connect.md) endpoint is the only OAuth option. For production authentication the [Live Connect](authentication-oauth-live-connect.md) endpoint is no longer the recommended approach, so you should use the [Microsoft identity platform endpoint](authentication-oauth-identity-platform.md). For details see [Upgrade to the Microsoft identity platform endpoint FAQ](authentication-oauth.md#upgrade-identity-platform-faq).  
@@ -41,7 +41,6 @@ For the sandbox environment, the following are the endpoints you must use to get
 |---|---|---|
 |Domain for email used when getting a Microsoft account|Any email address|outlook-int.com|
 |Endpoint to change the Microsoft account password|[account.live.com/password/change](https://account.live.com/password/change)|[account.live-int.com/password/change](https://account.live-int.com/password/change)|
-|Endpoint for getting a client ID|[apps.dev.microsoft.com/#/appList](https://apps.dev.microsoft.com/#/appList)|[apps.dev.microsoft-int.com/#/appList](https://apps.dev.microsoft-int.com/#/appList)<br/><br/>Note the "INT" application registration site is deprecated and will not be available starting in September 2019. As described above you can use this public application ID for testing in sandbox: db41b09d-6e50-4f4a-90ac-5a99caefb52f|
 |Endpoint for OAuth requests via [Live Connect](authentication-oauth-live-connect.md)|login.live.com|login.live-int.com|
 
 Also as mentioned above, supported services in sandbox vary from production. To get the web service addresses for sandbox, see [Bing Ads API Web Service Addresses](web-service-addresses.md).
@@ -91,7 +90,7 @@ Microsoft Advertising sends an email invite to the user. If the invite doesn’t
 6. Finish the work flow by specifying the rest of your user information
 7. Exit Microsoft Advertising after completing the MSA process.
 
-After Bing creates the account, you may use the outlook**-int**.com credentials in sandbox and during [app registration](https://apps.dev.microsoft-int.com/#/appList).
+After Bing creates the account, you may use the outlook**-int**.com credentials in sandbox and during [app registration](authentication-oauth-live-connect.md#registerapplication).
 
 > [!NOTE]
 > The MSA signup process returns you to the SI Microsoft Advertising user interface (ui.si.bingads.microsoft.com). After completing the MSA process, sign out of the SI interface and then sign in using your new MSA email address at [https://secure.sandbox.bingads.microsoft.com/](https://secure.sandbox.bingads.microsoft.com/).
