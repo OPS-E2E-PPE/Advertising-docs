@@ -25,7 +25,7 @@ The *GetAccountsInfoRequest* object defines the [body](#request-body) and [heade
 |Element|Description|Data Type|
 |-----------|---------------|-------------|
 |<a name="customerid"></a>CustomerId|The identifier of the customer used to get the account information.<br/><br/>This request element is optional. If not set, the user's credentials are used to determine the customer.|**long**|
-|<a name="onlyparentaccounts"></a>OnlyParentAccounts|Determines whether to return only the ad accounts that belong to the customer or to also return linked ad accounts under other customers.<br/><br/>To limit the results to ad accounts directly under the specified customer, set this element to *true*, and otherwise leave it empty or set the property to *false*. The default value is *false*.|**boolean**|
+|<a name="onlyparentaccounts"></a>OnlyParentAccounts|Determines whether to return only the advertiser accounts that belong to the customer or to also return linked advertiser accounts under other customers.<br/><br/>To limit the results to advertiser accounts directly under the specified customer, set this element to *true*, and otherwise leave it empty or set the property to *false*. The default value is *false*.|**boolean**|
 
 ### <a name="request-header"></a>Request Header Elements
 [!INCLUDE[request-header](./includes/request-header.md)]
@@ -37,7 +37,7 @@ The *GetAccountsInfoResponse* object defines the [body](#response-body) and [hea
 
 |Element|Description|Data Type|
 |-----------|---------------|-------------|
-|<a name="accountsinfo"></a>AccountsInfo|The list of information about ad accounts that match the request criteria.<br/><br/>Note that there can be a delay of up to five minutes from the time that you create an account until the account information is included in the response.|[AccountInfo](accountinfo.md) array|
+|<a name="accountsinfo"></a>AccountsInfo|The list of information about advertiser accounts that match the request criteria.<br/><br/>Note that there can be a delay of up to five minutes from the time that you create an account until the account information is included in the response.|[AccountInfo](accountinfo.md) array|
 
 ### <a name="response-header"></a>Response Header Elements
 [!INCLUDE[response-header](./includes/response-header.md)]

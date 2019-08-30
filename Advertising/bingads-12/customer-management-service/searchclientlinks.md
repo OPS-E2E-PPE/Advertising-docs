@@ -15,7 +15,7 @@ dev_langs:
 Searches for the client links for the customer of the current authenticated user, filtered by the search criteria. The operation returns the most recent link for each unique combination of agency customer and client account. 
 
 > [!NOTE]
-> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. 
+> Only a user with Super Admin or Standard credentials can add, update, and search for client links to advertiser accounts. 
 > 
 > Only a user with Super Admin credentials can add, update, and search for client links to customers. 
 > 

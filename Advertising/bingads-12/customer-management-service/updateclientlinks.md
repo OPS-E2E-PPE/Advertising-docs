@@ -15,7 +15,7 @@ dev_langs:
 Updates the status of the specified client links. 
 
 > [!NOTE]
-> Only a user with Super Admin or Standard credentials can add, update, and search for client links to ad accounts. 
+> Only a user with Super Admin or Standard credentials can add, update, and search for client links to advertiser accounts. 
 > 
 > Only a user with Super Admin credentials can add, update, and search for client links to customers. 
 > 

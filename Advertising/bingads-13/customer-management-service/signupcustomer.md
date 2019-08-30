@@ -19,9 +19,9 @@ Creates a new customer and account that rolls up to your reseller payment method
 
 Pass both [Customer](customer.md) and [AdvertiserAccount](advertiseraccount.md) objects in the request. 
 - The customer object includes the customer's name, the address where the customer is located, the market in which the customer operates, and the industry in which the customer participates. Although it is possible to add multiple customers with the same details, you should use unique customer names so that users can easily distinguish between customers in a user interface.
-- The ad account object must include the name of the account, the type of currency to use to settle the account, and the payment method identifier must be set to null. The operation generates an invoice account and sets the payment method identifier to the identifier associated with the reseller's invoice. You are invoiced for all charges incurred by the customers that you manage.
+- The advertiser account object must include the name of the account, the type of currency to use to settle the account, and the payment method identifier must be set to null. The operation generates an invoice account and sets the payment method identifier to the identifier associated with the reseller's invoice. You are invoiced for all charges incurred by the customers that you manage.
 
-When the operation succeeds, a new managed customer is created outside of the reseller customer and an ad account is created within the managed customer. 
+When the operation succeeds, a new managed customer is created outside of the reseller customer and an advertiser account is created within the managed customer. 
 
 ## <a name="request"></a>Request Elements
 The *SignupCustomerRequest* object defines the [body](#request-body) and [header](#request-header) elements of the service operation request. The elements must be in the same order as shown in the [Request SOAP](#request-soap). 
