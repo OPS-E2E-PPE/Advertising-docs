@@ -3,13 +3,10 @@
     {
       "docset_name": "BingAds",
       "build_source_folder": "Advertising",
-      "build_output_subfolder": "Advertising",
+      "build_output_subfolder": "BingAds",
       "locale": "en-us",
       "monikers": [],
-      "moniker_ranges": [
-        "=bingads-12",
-        "=bingads-13"
-      ],
+      "moniker_ranges": [],
       "open_to_public_contributors": true,
       "type_mapping": {
         "Conceptual": "Content",
