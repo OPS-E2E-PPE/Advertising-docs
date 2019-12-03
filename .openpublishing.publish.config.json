@@ -21,10 +21,7 @@
       "version": 0
     }
   ],
-  "notification_subscribers": [
-    "eric.urban@microsoft.com",
-    "scottwhi@microsoft.com"
-  ],
+  "notification_subscribers": [],
   "branches_to_filter": [],
   "git_repository_url_open_to_public_contributors": "https://github.com/MicrosoftDocs/Advertising-docs",
   "git_repository_branch_open_to_public_contributors": "master",
